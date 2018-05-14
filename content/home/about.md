@@ -10,31 +10,30 @@ weight = 5
 # List your academic interests.
 [interests]
   interests = [
+    "Business Modeling",
     "Artificial Intelligence",
-    "Computational Linguistics",
-    "Information Retrieval"
+    "Machine Learning",
+    "Conversational UXs",
+    "Blockchain Business Networks"
   ]
 
 # List your qualifications (such as academic degrees).
 [[education.courses]]
-  course = "PhD in Artificial Intelligence"
-  institution = "Stanford University"
-  year = 2012
+  course = "M.Sc. Technology Management"
+  institution = "University of Maryland University College"
+  year = 1997
 
 [[education.courses]]
-  course = "MEng in Artificial Intelligence"
-  institution = "Massachusetts Institute of Technology"
-  year = 2009
+  course = "B.Sc. Computer Science"
+  institution = "Pennsylvania State University"
+  year = 1990
 
-[[education.courses]]
-  course = "BSc in Artificial Intelligence"
-  institution = "Massachusetts Institute of Technology"
-  year = 2008
- 
 +++
 
-# Biography
+Shahid Shah is an award-winning Government 2.0, Health IT, Bio IT & digital Medical Device Inventor & CTO with over 28 years of technology strategy, architecture, engineering, entrepreneurship, speaking, and writing experience.
 
-Lena Smith is a professor of artificial intelligence at the Stanford AI Lab. Her research interests include distributed robotics, mobile computing and programmable matter. She leads the Robotic Neurobiology group, which develops self-reconfiguring robots, systems of self-organizing robots, and mobile sensor networks.
+He cofounded Citus Health, a home healthcare tech company focused on conversational user experiences, founded Netspective, which provides software architecture and engineering services, and helps with business modeling plus technology commercialization strategies for digital health and medical device companies. Shahid is the Publisher of Netspective Media, which hosts some of the world's best online news and professional communities sites focused on healthcare IT and medtech. 
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed neque elit, tristique placerat feugiat ac, facilisis vitae arcu. Proin eget egestas augue. Praesent ut sem nec arcu pellentesque aliquet. Duis dapibus diam vel metus tempus vulputate. 
+Shahid has been an Innovation Fellow and Entrepreneur-in-Residence (EIR) for America's Health Insurance Plans (AHIP) Innovation Lab and is a health technology advisor to the Larta Institute.
+
+Shahid sits on the boards of several startups as an advisor and an angel investor. He is a sought after international speaker and is regularly found on the stage at HIMSS, Health 2.0, HealthIMPACT, iMEDiTECH, AHIP, NHIA, and other conferences (over 150 events and counting in 6+ countries).
