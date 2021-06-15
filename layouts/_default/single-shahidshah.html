@@ -1,0 +1,72 @@
+<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Cutive+Mono|Lora:400,700|Roboto:400,700&display=swap">
+
+{{ partial "head.html" . }}
+{{ partial "nav-bar.html" . }}
+{{ partial "layouts-config.html" . }}
+<div class="shah-breadcrumbs">
+    <div class="container">
+        {{ partial "bread-crumb.html" . }}
+    </div>
+</div>
+{{ partial "nav.html" . }}
+
+<link href="{{ print ($.Scratch.Get "basePath") }}/css/shahidshah/custom.css" media="screen" rel="stylesheet" />
+<link rel="stylesheet" href="{{ print ($.Scratch.Get "basePath") }}/css/shahidshah/bootstrap.min.css" />
+<link rel="stylesheet" href="{{ print ($.Scratch.Get "basePath") }}/css/shahidshah/fontawesome_v5.6.3_all.css">
+<script src="{{ print ($.Scratch.Get "basePath") }}/js/shahidshah/custom.js"></script>
+<section id="siingle-shahidshah" class="home-section wg-blank shahidshah-widget pt-3">
+
+<div class="container">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <h1>{{ .Title }}</h1>
+            {{ $permaLink := .Permalink | safeURL}}      
+            {{ $safeUrl := $.Site.Params.siteUrl }}       
+            {{ $href := print "https://www.facebook.com/sharer/sharer.php?u="  $safeUrl .RelPermalink }}
+            {{ $hrefTwitter := print "https://twitter.com/intent/tweet?url=" $safeUrl .RelPermalink }}
+            {{ $hrefLinked := print "http://www.linkedin.com/sharing/share-offsite/?url="  $safeUrl .RelPermalink }}
+            {{ $hrefMail := print "mailto:?subject=" .Title "&body=" $safeUrl .RelPermalink }}
+
+            <div class="article-metadata">
+              <div class="share-box" aria-hidden="true">
+                <ul class="share">
+                <li><a href="{{ $hrefTwitter }}" target="_blank" rel="noopener" class="share-btn-twitter fb-share"><i class="fab fa-twitter"></i></a></li>
+                <li><a href="{{ $href }}" target="_blank" rel="noopener" class="share-btn-facebook fb-share"><i class="fab fa-facebook-f"></i></a></li>
+                <li><a href="{{ $hrefMail }}" target="_blank" rel="noopener" class="share-btn-email"><i class="fas fa-envelope"></i></a></li>
+                <li><a href="{{ $hrefLinked }}" target="_blank" rel="noopener" class="share-btn-linkedin fb-share"><i class="fab fa-linkedin-in"></i></a></li>
+                </ul>
+              </div>
+            </div>
+
+      <article role="main" class="blog-post">
+        {{ .Content }}
+      </article>
+
+      <ul class="pager blog-pager">
+        {{ if .PrevInSection }}
+          <li class="previous">
+            <a href="{{ .PrevInSection.Permalink }}" data-toggle="tooltip" data-placement="top" title="{{ .PrevInSection.Title }}">&larr; {{ i18n "previousPost" }}</a>
+          </li>
+        {{ end }}
+        {{ if .NextInSection }}
+          <li class="next">
+            <a href="{{ .NextInSection.Permalink }}" data-toggle="tooltip" data-placement="top" title="{{ .NextInSection.Title }}">{{ i18n "nextPost" }} &rarr;</a>
+          </li>
+        {{ end }}
+      </ul>
+
+      {{ if (.Params.comments) | or (and (or (not (isset .Params "comments")) (eq .Params.comments nil)) (.Site.Params.comments)) }}
+        {{ if .Site.DisqusShortname }}
+          <div class="disqus-comments">
+            {{ template "_internal/disqus.html" . }}
+          </div>
+        {{ end }}
+      {{ end }}
+
+    </div>
+  </div>
+</div>
+ </section>
+    {{ partial "footer.html" . }}
+<!--<script src="{{ print ($.Scratch.Get "basePath") }}/js/jquery.min1.10.2.js"></script> -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>

@@ -1,0 +1,92 @@
+{{/* Pages Widget */}}
+
+{{/* Initialise */}}
+
+
+{{ $st := .Site.GetPage "section" "posts" }}
+{{/* $items_type := $st.Params.content.page_type | default "post" */}}
+{{ $items_offset := $st.Params.content.offset | default 0 }}
+{{ $items_count := $st.Params.content.count }}
+{{ if eq $items_count 0 }}
+  {{ $items_count = 65535 }}
+{{ else }}
+  {{ $items_count = $items_count | default 5 }}
+{{ end }}
+{{ $items_sort := $st.Params.content.order | default "desc" }}
+
+{{/* Query */}}
+
+{{ $v1 := where site.RegularPages "Type" "post" }}
+{{ $v2 := where .Site.Pages "Params.author" "Shahid Shah" }}
+{{ $query := $v1 | intersect $v2 }}
+
+
+{{ $archive_page := site.GetPage "Section" "architecture-engineering" }}
+
+{{/* Filters */}}
+{{ if $st.Params.content.filters.tag }}
+  {{ $archive_page = site.GetPage (printf "tags/%s" $st.Params.content.filters.tag) }}
+  {{ $query = $query | intersect $archive_page.Pages }}
+{{ end }}
+{{ if $st.Params.content.filters.category }}
+  {{ $archive_page = site.GetPage (printf "categories/%s" $st.Params.content.filters.category) }}
+  {{ $query = $query | intersect $archive_page.Pages }}
+{{ end }}
+{{ if $st.Params.content.filters.publication_type }}
+  {{ $archive_page = site.GetPage (printf "publication_types/%s" $st.Params.content.filters.publication_type) }}
+  {{ $query = $query | intersect $archive_page.Pages }}
+{{ end }}
+{{ if $st.Params.content.filters.exclude_featured }}
+  {{ $query = where $query "Params.featured" "!=" true }}
+{{ end }}
+{{ if $st.Params.content.filters.exclude_past }}
+  {{ $query = where $query "Date" ">=" now }}
+{{ end }}
+{{ if $st.Params.content.filters.exclude_future }}
+  {{ $query = where $query "Date" "<" now }}
+{{ end }}
+
+{{ $count := len $query }}
+
+{{/* Sort */}}
+{{ $sort_by := "Date" }}
+{{ $query = sort $query $sort_by $items_sort }}
+
+{{/* Offset and Limit */}}
+{{ if gt $items_offset 0 }}
+  {{ $query = first $items_count (after $items_offset $query) }}
+{{ else }}
+  {{ $query = first $items_count $query }}
+{{ end }}
+
+{{/* Localisation */}}
+{{ $i18n := "" }}
+{{ $i18n = "more_pages" }}
+
+
+<div class="row">
+  <div class="col-12 col-lg-4 section-heading">
+    <h1>Posts</h1>
+    {{ with $st.Params.subtitle }}<p>{{ . | markdownify | emojify }}</p>{{ end }}
+  </div>
+  <div class="col-12 col-lg-8">
+
+    {{ with $st.Content }}{{ . }}{{ end }}
+
+    {{ range $post := $query }}
+      
+        {{ partial "li_compact" . }}
+
+    {{end}}
+
+    {{ if gt $count $items_count }}
+    <div class="see-all">
+      <a href="{{ $archive_page.RelPermalink }}">
+        {{ i18n $i18n | default "See all" }}
+        <i class="fas fa-angle-right"></i>
+      </a>
+    </div>
+    {{ end }}
+
+  </div>
+</div>

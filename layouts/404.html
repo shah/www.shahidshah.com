@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.LanguageCode }}" dir="ltr">
+{{ partial "head.html" . }}
+
+<body class="single-body">
+  {{ partial "nav-bar.html" . }}
+  <section class="container">
+    <main class="content side-text-padding container single-blog-card single-block page-not-found-card">
+        <h1 >404</a></h1>
+        <h2 >The page you requested could not found</h2>
+            <div>
+                    <h6 ><a href="{{ "/" | relURL }}">Go Home</a></h6>
+           </div>
+    </main>
+  </section>
+  {{ partial "footer.html" . }}
+</body>
+
+</html>

@@ -1,0 +1,32 @@
+{{ $page := .Site.GetPage "section" "intel-prop" }}
+
+<!-- Experience widget -->
+<div class="row">
+  <div class="col-lg-12 section-heading">
+    <h1>{{ with $page.Title }}{{ . | markdownify }}{{ end }}</h1>
+    {{ with $page.Params.subtitle }}<p>{{ . | markdownify }}</p>{{ end }}
+  </div>
+  <div class="col-lg-12">
+    {{ with $page.Content }}{{ . }}{{ end }}
+
+    {{ if $page.Params.ip }}
+    {{ $exp_len := len $page.Params.ip }}
+    <div class="table-responsive">
+        <table class="table table-striped table-txt-1">                    
+            <tr>
+                <th>Patent</th>
+                <th>Title</th>
+                <th>Overview</th>
+            </tr>   
+            {{ range $idx, $key := sort $page.Params.ip ".date_start" "desc" }}
+            <tr>           
+              <td>{{with .Link}}<a href="{{.}}" target="_blank" rel="noopener">{{end}}{{.Patent | markdownify | emojify}}{{with .Link}}</a>{{end -}} </td>                               
+              <td>{{with .Title}}<div class="card-text">{{. | markdownify | emojify}}</div>{{end}}</td>           
+              <td>{{with .Overview}}<div class="card-text">{{. | markdownify | emojify}}</div>{{end}}</td>            
+            </tr>          
+            {{end}}
+        </table>  
+    </div>  
+    {{end}}
+  </div>
+</div>

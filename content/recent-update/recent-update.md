@@ -1,0 +1,4 @@
+--- 
+ type: 'page' 
+ displayinlist: false
+---

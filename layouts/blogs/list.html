@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.LanguageCode }}" dir="ltr">
+{{ partial "head.html" . }}
+{{ partial "nav-bar.html" . }}
+{{ partial "layouts-config.html" . }}
+<div class="shah-breadcrumbs">
+    <div class="container">
+        {{ partial "bread-crumb.html" . }}
+    </div>
+</div>
+{{ partial "nav.html" . }}
+<body class="list-body">
+<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Cutive+Mono|Lora:400,700|Roboto:400,700&display=swap">
+<link href="{{ print ($.Scratch.Get "basePath") }}/css/shahidshah/custom.css" media="screen" rel="stylesheet" />
+<link rel="stylesheet" href="{{ print ($.Scratch.Get "basePath") }}/css/shahidshah/bootstrap.min.css" />
+<link rel="stylesheet" href="{{ print ($.Scratch.Get "basePath") }}/css/shahidshah/fontawesome_v5.6.3_all.css">
+<script src="{{ print ($.Scratch.Get "basePath") }}/js/shahidshah/custom.js"></script>
+<section id="" class="home-section wg-blank shahidshah-widget pt-3">
+    <div class="container">
+        <h1>{{ .Title }}</h1>
+        {{ with .Content }}
+        <div class="article-style">{{ . }}</div>
+        {{ end }}
+        {{ $paginator := .Paginate .Data.Pages }}
+        {{ range $paginator.Pages }}   
+            {{ partial "li_compact" . }}
+        {{ end }}
+        {{ partial "pagination" . }}
+    </div>
+</section>
+        {{ partial "footer.html" . }}
+</body>
+</html>
+<!--<script src="{{ print ($.Scratch.Get "basePath") }}/js/jquery.min1.10.2.js"></script> -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>

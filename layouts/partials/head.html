@@ -1,0 +1,211 @@
+<head>  
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','{{ $.Site.Params.GTMCode }}');</script>
+  <!-- End Google Tag Manager -->
+
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+   {{ $currentTag := index (last 5 (split (delimit (split .Permalink "/") "," "") ",")) 0 }}
+  <!-- Title tag -->
+ 
+  
+  <title>  {{ if isset .Params "metaTitle" }} {{ .Params.metaTitle | safeHTML }} {{ else }} {{ .Params.title | safeHTML }} {{ end }}  </title>
+ 
+  
+<meta name="description" content='{{ if isset .Params "metaDesc" }}{{ .Params.metaDesc | safeHTML }}{{ else }}{{.Summary}}{{ end }}' />
+   
+ <!-- Meta Description End -->
+ <meta property="og:title" content='{{ if isset .Params "metaTitle" }} {{ .Params.metaTitle | safeHTML }}{{ else }}{{.Params.title | safeHTML }} {{ end }}' />
+ <meta property="og:url" content="{{ $.Site.Params.siteUrl }}{{.RelPermalink}}" />
+ <meta property="og:image" content='{{ if and (isset .Params "ogImage") (ne .Params.ogImage "Nil") }} {{ $.Site.Params.siteUrl }}{{ .Params.ogImage }}{{ else if isset .Params "featuredimage" }}{{ $.Site.Params.siteUrl }}{{ .Params.featuredimage }}{{ else if isset .Params "featuredimg" }}{{ $.Site.Params.siteUrl }}profile/regulated/institution/us-dhhs-cms/hospital/{{ .Params.featuredimg }}{{ else }}{{$.Site.Params.siteUrl }}images/home-graphic-1.png {{ end }}' />
+ 
+ <meta property="og:type" content="website" />
+<!-- start opengraph data -->
+{{ if (eq .Params.sub "events") }}
+   {{ $openGraphMetaData := .Params.openGraphMetaData }}
+    {{ range $key, $value :=  $openGraphMetaData  }}
+      <meta property="{{ $key }}" content="{{ $value }}" />
+   {{ end }} 
+    {{ end }} 
+  <meta property="og:description" content='{{ if isset .Params "metaDesc" }}{{ .Params.metaDesc | safeHTML }}{{ else }}{{.Summary}} {{ end }}'>
+  <meta property="og:locale" content="en_US" />
+
+  
+  
+<!-- end opengraph data  -->
+ 
+
+<!-- start Twitter data -->
+   {{ if (eq .Params.sub "events") }}
+   {{ $twitterMetaData := .Params.twitterMetaData }}
+   {{ range $key, $value :=  $twitterMetaData  }}
+      <meta property="{{ $key }}" content="{{ $value }}" />
+   {{ end }}
+   {{ end }}
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@Medigy" />
+    <meta name="twitter:title" content='{{ if isset .Params "metaTitle" }} {{ .Params.metaTitle | safeHTML }}{{ else }}{{ .Params.title | safeHTML }} {{ end }}' />
+    <meta name="twitter:description" content='{{ if isset .Params "metaDesc" }} {{ .Params.metaDesc | safeHTML }}{{ else }}{{.Summary}} {{ end }}' />
+    <meta property="twitter:image" content='{{ if and (isset .Params "ogImage") (ne .Params.ogImage "Nil") }} {{ $.Site.Params.siteUrl }}{{ .Params.ogImage }}{{ else if isset .Params "featuredimage" }}{{ $.Site.Params.siteUrl }}{{ .Params.featuredimage }}{{ else if isset .Params "featuredimg" }}{{ $.Site.Params.siteUrl }}profile/regulated/institution/us-dhhs-cms/hospital/{{ .Params.featuredimg }}{{ else }}{{$.Site.Params.siteUrl }}images/home-graphic-1.png {{ end }}'/>
+ 
+ 
+<!-- end Twitter data -->
+  <!-- Standard favicon -->
+  <link rel="icon" type="image/x-icon" href="/img/media.ico">
+  <!-- Recommended favicon format -->
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <link rel="stylesheet" href="/css/normalize.min.css" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/xcode.css" />
+  <!-- bootstrap & responsive css -->
+  <!--<link href="https://clin-table-search.lhc.nlm.nih.gov/lforms-versions/13.1.0/styles/lforms.min.css" media="screen" rel="stylesheet"
+    />-->
+  <link rel="stylesheet" href="/css/bootstrap.min.css" />  
+  <link rel="stylesheet" href="/css/fhir-theme.css" />
+  <link rel="stylesheet" href="/css/fontawesome_v5.6.3_all.css">
+  <!-- bootstrap & jquery js -->
+  <!--<script src="/js/jquery.min1.10.2.js"></script> -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/js/sourcebuster.min.js"></script>
+
+ 
+   
+  <link rel="stylesheet" href="/css/latolatinfonts.css" />
+
+  {{ if isset $.Site.Params "bgimg" }}
+  <style>
+    body {
+      background: #ecedef url("{{ $.Site.Params.bgimg | safeCSS }}") repeat;
+    }
+  </style>
+  {{ end }}
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<meta name="yandex-verification" content="dc730b9540a1bf82" />
+<meta name="msvalidate.01" content="152F12319D1A5CD80F1EC0116FB589D2" />
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-93818-16"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-93818-16');
+</script>
+
+  <script>
+/* $( window ).on( "load", function() {
+        console.log( "window loaded" );
+        $('.tag-style-1').css("display","inline-block");
+    }); */
+      $(document).ready(function() {
+        console.log( "dom loaded" );
+        
+      $('.fb-share').click(function(e) {
+        e.preventDefault();
+        window.open($(this).attr('href'), 'fbShareWindow', 'height=450, width=550, top=' + ($(window).height() / 2 - 275) + ', left=' + ($(window).width() / 2 - 225) + ', toolbar=0, location=0, menubar=0, directories=0, scrollbars=0');
+        return false;
+      });
+
+
+      /// To remove "Medigy:" from category starts here
+      /*
+      $('.tag-style-1').each( function(){
+      var category = $(this).find('a').html();
+      if(category.indexOf("Medigy: ") != -1){
+        var splitedCategory = category.split(':');
+        $(this).find('a').html(splitedCategory[1]);
+      }
+      });
+      */
+   
+      /// To remove "Medigy:" from category ends here
+      });
+
+      /*
+      $(document).ready(function(){
+        $('.hamburger-menu > span ').hide();
+        $('.hamburger-menu').on("click", function(){
+          if ( $( 'body' ).hasClass( 'hurb-menu-custom' ))
+          {
+            $('body').removeClass('hurb-menu-custom');
+
+          }
+          else
+          { 
+            $('.hamburger-menu > span ').show();  
+            $('body').addClass('hurb-menu-custom');
+          }
+       });
+
+      });
+      hamburger-menu
+      */
+  </script>
+
+<!-- Google Tag Manager -->
+<div id="g-tag-head">
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','{{ $.Site.Params.GTMCode }}');</script>
+</div>
+  <!-- End Google Tag Manager -->
+
+<!-- Site schema starts here-->
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Website",
+    "headline": "Medigy",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "{{ $.Site.Params.siteUrl }}"
+      },
+    "genre": "Digital Health IT Softwares & Applications",
+    "url": "{{ $.Site.Params.siteUrl }}",
+     "publisher": {
+      "@type": "Organization",
+      "name": "Medigy",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "{{ $.Site.Params.siteUrl }}img/Medigy Logo with caption.png",
+        "width": 127,
+        "height": 40
+      }
+    },
+    "author": {
+      "@type": "Person",
+      "name": "Shahid Shah"
+    },
+    "description": "Discovering Solutions....... Together"
+  }
+  </script>
+  <!-- Site schema ends here-->
+ 
+<script>
+    function setCookie(key, value) {
+    var expires = new Date();
+    if (key == 'cookie-agree')
+      expires.setTime(expires.getTime() + (365 * 24 * 60 * 60 * 1000));
+    else
+      expires.setTime(expires.getTime() + (5 * 24 * 60 * 60 * 1000));
+    document.cookie = key + '=' + value + ';expires=' + expires.toUTCString() + ';path=/';
+  }
+
+  function getCookie(key) {
+    var keyValue = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
+    return keyValue ? keyValue[2] : null;
+  }
+</script>
+<script type="text/javascript" src="//script.crazyegg.com/pages/scripts/0092/8173.js" async="async"></script>
+<script type="text/javascript" src="/js/page-service-call.js"></script>
+
+</head>

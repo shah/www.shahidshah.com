@@ -1,0 +1,22 @@
+<!-- 
+if baseURL is "https://profiles.pages.gl.infra.medigy.com/influencers/individuals/shahidshah" then:
+  * $basePath := "/influencers/individuals/shahidshah"
+  * $innerBasePath := "/influencers/individuals/shahidshah/shahidshah/"
+  * $cssPath := "influencers/individuals/shahidshah"
+  * $jsPath := "influencers/individuals/shahidshah"
+  * $imagePath := "influencers/individuals/shahidshah"
+-->
+<!-- Set the base path here -->
+{{ $basePath := "" }} 
+{{ $innerBasePath := "/shahidshah/" }} <!-- Ask Jijo, why is this here? -->
+{{ $cssPath := "" }}
+{{ $jsPath := "" }}
+{{ $imagePath := "" }}
+
+<!-- Ask Jijo, why is this here? -->
+<!-- set varile to get on more scopes -->
+{{ $.Scratch.Set "basePath"             $basePath }}
+{{ $.Scratch.Set "innerBasePath"        $innerBasePath }}
+{{ $.Scratch.Set "cssPath"          $cssPath }}
+{{ $.Scratch.Set "jsPath"           $jsPath }}
+{{ $.Scratch.Set "imagePath"           $imagePath }}

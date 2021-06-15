@@ -1,0 +1,68 @@
+<html lang="{{ .Site.LanguageCode }}" dir="ltr">
+<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Cutive+Mono|Lora:400,700|Roboto:400,700&display=swap">
+{{ partial "head.html" . }}
+{{ partial "nav-bar.html" . }}
+<link href="/css/shahidshah/custom.css" media="screen" rel="stylesheet" />
+
+<script src="/js/shahidshah/custom.js"></script>
+
+<section id="about" class="home-section wg-about shahidshah-widget">
+
+{{ partial "widgets/about.html" .  }}
+</section>
+<section id="about" class="home-section wg-about shahidshah-widget" style="padding:10px 0 40px"> 
+<div class="container">
+{{ partial "widgets/accomplishments.html" .  }}
+</div>
+</section>
+<section id="about" class="home-section wg-about shahidshah-widget" style="padding:45px 0">
+
+{{ partial "widgets/tweets.html" .  }}
+</section>
+<section id="about" class="home-section wg-about shahidshah-widget" style="padding:10px 0 40px">  
+<div class="container">
+{{ partial "widgets/featurette.html" .  }}
+</div>
+</section>
+<section id="about" class="home-section wg-about shahidshah-widget" style="padding:50px 0 80px">
+<div class="container">
+
+{{ partial "widgets/past-speaking.html"  . }}
+</div>
+</section>
+<section id="about" class="home-section wg-about shahidshah-widget" style="padding:10px 0 40px"> 
+<div class="container">
+
+{{ partial "widgets/experience.html" .  }}
+</div>
+</section>
+<section id="about" class="home-section wg-about shahidshah-widget" style="padding:30px 0 40px">
+<div class="container">
+
+{{ partial "widgets/endorsements.html" .  }}
+</div>
+</section>
+<section id="about" class="home-section wg-about shahidshah-widget" style="padding:30px 0 40px">
+<div class="container">
+    {{ partial "widgets/pages.html" .  }}
+</div>
+</section>
+<section id="about" class="home-section wg-about shahidshah-widget" style="padding:30px 0 40px">
+<div class="container">
+    {{ partial "widgets/contact.html" .  }}
+</div>
+</section>
+{{ partial "footer.html" . }}
+
+</html>
+<script>
+// Get the element with id="defaultOpen" and click on it
+if (document.body.contains(document.getElementById('defaultOpenExp'))) {
+    document.getElementById("defaultOpenExp").click();
+}
+// Get the element with id="defaultOpen" and click on it
+if (document.body.contains(document.getElementById('defaultOpen'))) {
+    document.getElementById("defaultOpen").click();
+}
+</script>
+

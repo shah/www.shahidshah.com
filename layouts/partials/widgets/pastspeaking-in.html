@@ -1,0 +1,40 @@
+{{ $page := .Site.GetPage "section" "past-speaking-in" }}
+{{ partial "layouts-config.html" . }}
+
+<div class="container">
+    {{ with $page.Title }}
+    <div class="tabhead"><h2>{{ with $page.Title }}{{ . | markdownify }}{{ end }}</h2></div> 
+    {{ end }}
+
+    <br>
+    
+
+
+
+
+    <div class="row">
+    {{ with $page.Content }}
+    <div class="col-md-12">
+      {{ . }}
+    </div>
+    {{ end }}
+    {{ range $page.Params.item }}
+      <div class="col-sm-6">               
+                <div class="media_coverage_new_wrapper">
+                    <div class="media_coverage_new_logo_container">
+                        {{ $url := print ($.Scratch.Get "basePath") "/shahidshah" .Logo }}
+                        <p><img class="img-responsive" src="{{ $url | absURL }}"></p>
+                    </div>
+                    <div class="media_coverage_new_txt_container">
+                        <p class="media_coverage_heading_p">
+                            <a target="_blank" href="{{ .Link }}" data-wpel-link="external" rel="external noopener noreferrer">{{ .Title }}</a>
+                        </p>
+                        <p class="media_coverage_date_p">{{ .Place }}</p>
+                        <p class="media_coverage_date_p">{{ .Date }}</p>
+                    </div> 
+                </div>                   
+            </div>
+    {{ end }}
+  </div>
+</div>
+

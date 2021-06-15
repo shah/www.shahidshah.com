@@ -1,0 +1,72 @@
+{{ $page := .Site.GetPage "section" "accomplishments" }}
+
+{{ partial "layouts-config.html" . }}
+
+<!-- Accomplishments (Recommendations) widget -->   
+<div class="tabhead"><h2>{{ with $page.Title }}{{ . | markdownify }}{{ end }}</h2></div>     
+{{ with $page.Content }}{{ . }}{{ end }}
+{{ if $page.Params.item }}
+<div class="tab">
+    <ul class="list-inline wow fadeInUp" data-wow-duration=".5s" data-wow-delay=".7s">
+        <li class="list-inline-item">
+            <button class="tablinksExp" id="defaultOpenExp" onclick="openExp(event, 'Current')">Received</button>
+        </li>
+        <li class="list-inline-item">
+            <button class="tablinksExp" onclick="openExp(event, 'Past')">Given</button>
+        </li>
+    </ul> 
+</div> 
+<div class="container">
+  <div class="row">
+    <div id="Current" class="tabcontentExp"><!-- Received tab content-->
+        {{ range first 3 (sort $page.Params.item ".date_start" "desc") }}                            
+          <article class="row">                             
+              <div class="col-md-1">
+                  {{ $url := print ($.Scratch.Get "basePath") "/shahidshah" .clientThumb }}
+                  <img src="{{ $url | absURL }}" class="img-responsive" alt="client-image">                 
+              </div>
+              <div class="col-md-3">
+                <h4 class="card-title exp-title text-muted my-0">{{.title | markdownify | emojify}}</h4>                                                      
+                {{- .organization | markdownify | emojify -}}                   
+                <!--<span class="middot-divider"></span>-->
+                {{ (time .date_start).Format ($page.Params.date_format | default "Jan 2006") }}
+                {{ if .date_end}}
+                – {{ (time .date_end).Format ($page.Params.date_format | default "Jan 2006") }}
+                {{end}}
+              </div>
+              <div class="col-md-8">
+              {{with .description}}
+                <div class="card-text">{{. | markdownify | emojify}}</div>
+              {{end}}     
+            </div>
+          </article>
+        {{end}}
+    </div>
+
+    <div id="Past" class="tabcontentExp"> <!-- Given  tab content-->
+    {{ range last 3 (sort $page.Params.item ".date_start" "desc") }}    
+      <article class="row">                             
+              <div class="col-md-1">
+                  {{ $url := print ($.Scratch.Get "basePath") "/shahidshah" .clientThumb }}
+                  <img src="{{ $url | absURL }}" class="img-responsive" alt="client-image">                 
+              </div>
+              <div class="col-md-3">
+                <h4 class="card-title exp-title text-muted my-0">{{.title | markdownify | emojify}}</h4>                                                      
+                {{- .organization | markdownify | emojify -}}                   
+                <!--<span class="middot-divider"></span>-->
+                {{ (time .date_start).Format ($page.Params.date_format | default "Jan 2006") }}
+                {{ if .date_end}}
+                – {{ (time .date_end).Format ($page.Params.date_format | default "Jan 2006") }}
+                {{end}}
+              </div>
+              <div class="col-md-8">
+              {{with .description}}
+                <div class="card-text">{{. | markdownify | emojify}}</div>
+              {{end}}     
+            </div>
+          </article>
+    {{end}}
+    </div>
+  </div>
+</div>
+{{end}}

@@ -1,0 +1,22 @@
+<html lang="{{ .Site.LanguageCode }}" dir="ltr">
+<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Cutive+Mono|Lora:400,700|Roboto:400,700&display=swap">
+{{ partial "head.html" . }}
+{{ partial "nav-bar.html" . }}
+{{ partial "layouts-config.html" . }}
+<div class="shah-breadcrumbs">
+    <div class="container">
+        {{ partial "bread-crumb.html" . }}
+    </div>
+</div>
+{{ partial "nav.html" . }}
+<link href="{{ print ($.Scratch.Get "basePath") }}/css/shahidshah/custom.css" media="screen" rel="stylesheet" />
+<link rel="stylesheet" href="{{ print ($.Scratch.Get "basePath") }}/css/shahidshah/bootstrap.min.css" />
+<link rel="stylesheet" href="{{ print ($.Scratch.Get "basePath") }}/css/shahidshah/fontawesome_v5.6.3_all.css">
+<section id="about" class="home-section wg-about shahidshah-widget pt-3">
+{{ partial "widgets/media-coverage.html" .  }}
+</section>
+{{ partial "footer.html" . }}
+</html>
+<!--<script src="{{ print ($.Scratch.Get "basePath") }}/js/jquery.min1.10.2.js"></script> -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+

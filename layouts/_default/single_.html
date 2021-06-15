@@ -1,0 +1,2138 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.LanguageCode }}" dir="ltr">
+{{ partial "head.html" . }}
+<link href="/css/lforms.min.css" media="screen" rel="stylesheet" />
+<link href="/css/bootstrap-slider.css" media="screen" rel="stylesheet" />
+<style>
+  /*.lf-form-body .ng-scope .lf-form-table>div:first-child {
+    display: none !important;
+  }*/
+</style>
+
+
+
+<body class="single-body">
+  
+  <!-- Google Tag Manager (noscript) -->
+  <noscript>
+    <iframe src="https://www.googletagmanager.com/ns.html?id={{ $.Site.Params.GTMCode }}" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+  </noscript> 
+  <!-- End Google Tag Manager (noscript) -->
+  {{ partial "nav-bar.html" . }}
+
+
+<script>
+  var extendedList = [];
+  function myArrayListcheck(){
+   var ilmProjectValue = $('#projectlist').val(); 
+   var listCheck =   $.inArray(ilmProjectValue, extendedList );
+   if(listCheck >= 0)
+   {
+     $('#alertMessageIlm').show();
+     $('#offeringrelationbtn').attr('disabled', true);
+   }
+
+   else
+   {
+    $('#alertMessageIlm').hide(); 
+    $('#offeringrelationbtn').attr('disabled', false);
+   }
+ 
+   //alert(ilmProjectValue);
+
+  }
+  function base64EncodeUnicode(str) {
+      // First we escape the string using encodeURIComponent to get the UTF-8 encoding of the characters, 
+      // then we convert the percent encodings into raw bytes, and finally feed it to btoa() function.
+      utf8Bytes = encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (match, p1) {
+        return String.fromCharCode('0x' + p1);
+      });
+
+      return btoa(utf8Bytes);
+    }
+     function recurringCharacterValidate(string) {
+      let isEmpty=true;
+      var alphabet = 'abcdefghijklmnopqrstuvwxyz0123456789'.split('');
+      alphabet.forEach((key,val)=>{
+            if(string.indexOf(key) > -1) isEmpty=false;
+          });
+      
+      return isEmpty;
+    }
+ $(document).ready(function () {
+  loadComment();
+
+   $("#addNewsIlm .form-control").on("keypress", function(e) {
+      if (e.which === 32 && !this.value.length)
+        e.preventDefault();
+     });
+ 
+
+
+
+
+      // See more procees starts here
+     
+
+
+
+
+      $('.ofer-see-more').on("click", function () {
+        var userEmail = getCookie('userEmail');
+         var product_Name = {{.Params.title}}; 
+         gtmAddproduct(product_Name,userEmail);
+
+        // if ($(this).html().search('See more') != -1)
+        // {
+        //   $(this).html('See less');
+        //   $('.ofer-see-more-short').hide();
+        //   $(this).addClass("Product_See_Less_Button");
+        //   $(this).removeClass("Product_See_More_Button");
+        // }
+        // else
+        // {
+        //   $(this).html('See more');
+        //   $('.ofer-see-more-short').show();
+        //    $(this).addClass("Product_See_More_Button");
+        //   $(this).removeClass("Product_See_Less_Button");
+        //   $('html, body').animate({
+        //       scrollTop: 10
+        //   }, 50);
+
+        // }
+          
+      });
+
+      // see more process ends here
+
+        // Project listing 
+        var usersession = getCookie('sessionId');
+        var tenantId = getCookie('tenantId');
+
+        if (usersession != null) { 
+
+
+        var loginSession = usersession;
+        
+        }
+        else
+        {
+
+        var loginSession = '';
+          
+        }
+
+console.log("query{\n  getAllIlmProjects(authorization:{\n    sessionID:\""+usersession+"\"\n  },getAnalytics:false){\n    id\n    name\n    description\n    created_at\n     }\n}");
+var serviceData = { "url": "{{ $.Site.Params.GraphQLUrl }}", "method": "GET", "query": "query{\n  getAllIlmProjects(authorization:{\n    sessionID:\""+usersession+"\"\n  },getAnalytics:false){\n    id\n    name\n    description\n    created_at\n     }\n}" };
+ajaxPageServiceCall.serviceCall(serviceData).then(response => {
+  html = '<option selected disabled value="">Select</option>';
+  console.log('ilm projects',response);
+  for (key in response.data.getAllIlmProjects) {
+
+    html += '<option value = "'+response.data.getAllIlmProjects[key].id+'">'+response.data.getAllIlmProjects[key].name+'</option>'
+
+  }
+  $('#projectlist').html(html);
+    })
+    .catch(error => {
+        console.log(error);
+    });
+
+
+  console.log("query{\n  getItemProjects(\n    authorization:{\n      sessionID:\""+loginSession+"\"\n    }\n, title:\"{{ .Params.title}}\"\n  ){\n    id\n    name\n    description\n   path_with_namespace\n  }\n}");
+  var serviceData = { "url": "{{ $.Site.Params.GraphQLUrl }}", "method": "GET", "query": "query{\n  getItemProjects(\n    authorization:{\n      sessionID:\""+loginSession+"\"\n    }\n, title:\"{{ .Params.title}}\"\n  ){\n    id\n    name\n    description\n   path_with_namespace\n  }\n}" };
+  ajaxPageServiceCall.serviceCall(serviceData).then(response => {
+    var ilmProjectListing = '';
+  var ilmList = '';
+  console.log(response);
+  var ilmnilProjectListing = ""
+  var ilmProjectList = response.data.getItemProjects.length;
+  if(ilmProjectList=='0')
+  {
+    ilmnilProjectListing = 'Currently this <b>{{ .Params.title}}</b> is not added to any ILM Projects. If you wish to evaluate this offering for any specific requirements, you can add this to an existing ILM Project with same nature or you may create a new <a href = "/create-ilm-project/">ILM Project</a> and add to it. <a data-toggle="modal" data-target="#addNewsIlm" class = "nullilmprojects" href = "#.">Click here to add this offering to a relevant  ILM Project</a> that you created or is a member of.';
+
+ 
+    $('.ilm-pr-modal-message-title').hide();
+    $('#getallilmProjectList').hide();
+
+    
+  }
+  $('#nililmProjectList').html(ilmnilProjectListing);
+  for (key in response.data.getItemProjects) {
+    extendedList.push(response.data.getItemProjects[key].id);
+    var ilmList = response.data.getItemProjects[key].name;
+    var projectSlug = response.data.getItemProjects[key].path_with_namespace;
+    
+
+   ilmProjectListing += '<li class="green-txt"><a href = "/modules/innovation-lifecycle-management/project/?ilm='+projectSlug+'">'+ilmList+'</a></li>';
+
+
+  }
+
+
+   
+   $('#getallilmProjectList').html(ilmProjectListing); 
+    })
+    .catch(error => {
+        console.log(error);
+    });
+  
+
+
+// End Project listing  
+
+// Login check for add to ILM project 
+
+$(".loginCheckforIlm").click(function(){
+
+      var personid = getCookie('personid');
+      
+
+       if(personid==null)
+        { 
+          setCookie('addtoilmbutton', 'true');  
+          $('#addNewsIlm').modal('hide'); 
+          $("#addtoilm").attr("data-toggle", 'modal');
+          $("#addtoilm").attr("data-target", '#loginModalCenter'); 
+        }
+         
+
+      
+    });
+
+// End Login check for add to ILM project 
+
+// Project- offering relation  
+
+
+  $("#canccel").click(function(e){
+
+location.reload(); 
+
+
+});
+
+ $("#offeringrelationbtn").click(function(e){
+ 
+  var imagePath = "{{.Params.featuredimage}}";
+   
+  e.preventDefault();
+
+  var notes = $('#projectcmnts').val();
+   notes = notes.replace(/%/g, "percentage");
+   notes = base64EncodeUnicode(notes);
+
+   var description = "{{ .Summary }}";
+   description = description.replace(/%/g, "percentage");
+   description = base64EncodeUnicode(description);
+
+   var offeringDate =  "{{ .Date.Format "2006-01-02" }}";
+   var urlPermalink = window.location.pathname;
+
+  var usersession = getCookie('sessionId');
+  
+ //console.log("mutation{\n  createIlmProjectItem(projectId:\""+$('#projectlist').val()+"\",\n  relationId:\"{{ .Params.id}}\",\n  relationType:\"{{ .Params.searchCategory }}\",\n  description:\""+notes+"\"\n  authorization:{\n    sessionID:\""+usersession+"\"\n  }  DataCollection:{\n  \n  dataType:\"{{ .Params.searchCategory }}\",\n  \n  source:\"Medigy\",\n  \n  title:\"{{ .Title }}\",\n  \n    \n  uniqueIdentifier:\""+urlPermalink+"\",\n  \n  description:\""+description+"\",\n  \n  postedDate:\""+offeringDate+"\",\n  \n    \n  offeringId:\""+$('#projectlist').val()+"\"\n  \n, \n  imageURL:\""+imagePath+"\"  }){\n    status\n    message\n  }\n}");return false;
+ var serviceData = { "url": "{{ $.Site.Params.GraphQLUrl }}", "method": "POST", "query": "mutation{\n  createIlmProjectItem(projectId:\""+$('#projectlist').val()+"\",\n  relationId:\"{{ .Params.id}}\",\n  relationType:\"{{ .Params.searchCategory }}\",\n  description:\""+notes+"\"\n  authorization:{\n    sessionID:\""+usersession+"\"\n  }  DataCollection:{\n  \n  dataType:\"{{ .Params.searchCategory }}\",\n  \n  source:\"Medigy\",\n  \n  title:\"{{ .Title }}\",\n  \n    \n  uniqueIdentifier:\""+urlPermalink+"\",\n  \n  description:\""+description+"\",\n  \n  postedDate:\""+offeringDate+"\",\n  \n    \n  offeringId:\""+$('#projectlist').val()+"\"\n  \n, \n  imageURL:\""+imagePath+"\"  }){\n    status\n    message\n  }\n}" };
+ if($('#projectlist')[0].reportValidity() && $('#projectcmnts')[0].reportValidity()){
+      $(this).val("Please wait");
+      $(this).attr('disabled',true);
+ajaxPageServiceCall.serviceCall(serviceData).then(response => {
+
+  responseStatus = response.data.createIlmProjectItem.status;
+  if(responseStatus == "Success")
+  {
+  $("#offeringrelationbtn").attr('disabled',true);
+      $("#canccel").attr('disabled',true);
+      var notifyMessage = 'Offering Added'; 
+      $('#offerAddedMessage').html(notifyMessage);
+      $('#offerAddedMessage').addClass('pull-right alert alert-success pt-2 pb-2 m-0');  
+      $("#offeringrelationbtn").val("SAVE");
+      $('#offerAddedMessage').fadeOut(8300);
+      //$("#toOfferingIm").trigger('reset');
+      window.setTimeout(function(){$('#addNewsIlm .close').click();},9000)
+      window.setTimeout(function () { location.reload() }, 3000)
+      $('#projectcmnts').val("");
+  }
+  else{
+
+     var notifyMessage = "Selected offering already exists";
+     $('#offerAddedMessage').html(notifyMessage);
+     $('#offerAddedMessage').addClass('pull-right alert alert-warning pt-2 pb-2 m-0');
+     $("#offeringrelationbtn").val("SAVE");
+     $('#offerAddedMessage').fadeOut(8300);
+
+
+  }
+
+    })
+    .catch(error => {
+        console.log(error);
+    });
+ }
+
+});
+
+// Project- offering relation 
+ 
+
+/// Ask a question Push data starts here ////
+
+      $(".askQuestion").on("click", function (e) {
+        var userEmail = getCookie('userEmail');
+         var product_Name = $(this).attr('data-name');      
+        gtmAddproduct(product_Name,userEmail); 
+        e.preventDefault();
+        if ($(this).hasClass("checked")) { 
+          //console.log('exists'); return false;
+        }
+        else {
+          var personid = getCookie('personid');
+          if( personid != '' && personid != null)
+          {
+            $('#questionTitle').focus();
+            $('#collapse26').collapse("show");
+            $('html, body').animate({
+                scrollTop: ($("#heading26").offset().top - 400)
+            }, 1000);
+            // $(this).addClass("checked");
+            $(this).css('cursor', 'default');              
+          }
+          else
+            $('#loginModalCenter').modal('toggle');
+        }
+        });
+
+/// Ask a question Push data ends here ////
+
+
+        // Verify the userLogin and enable edit button starts here
+        var personid = getCookie('personid');
+        var tenantArray = getCookie('tenantArray');
+        if (personid != null && tenantArray.includes($('.editProduct').attr('data-tenantId') )){
+          $('.editProduct' ).show();
+        }else{
+          $('.editProduct').hide();
+        }
+
+
+        $('.editProduct').on('click', function () {
+          setCookie('offeringId', $(this).attr('data-app'));
+          window.location.href = '/edit-product/';
+        });
+        // Verify the userLogin and enable edit button ends here
+        
+   
+        // Edit In DQA button starts
+        //var loginSession="f6c1df1691566c91143febcc87e406d324bfd4d86dd13f5702be8cd6ec2bcf5d";
+        console.log("query{\n  checkAdminPrivilege(\n    authorization:{\n      sessionID:\""+loginSession+"\"\n    }\n  )\n}");
+        var serviceData = { "url": "{{ $.Site.Params.GraphQLUrl }}", "method": "GET", "query": "query{\n  checkAdminPrivilege(\n    authorization:{\n      sessionID:\""+loginSession+"\"\n    }\n  )\n}" };
+        ajaxPageServiceCall.serviceCall(serviceData).then(response => {
+          if (response.data.checkAdminPrivilege==true){
+            $('.edit-in-dqa-product').show();
+          }
+          else{
+            $('.edit-in-dqa-product').hide();
+          }
+        })
+        .catch(error => {
+            console.log(error);
+        });
+        // Edit In DQA button ends
+     
+        {{ $.Scratch.Set "productId"  .Params.id }}
+        {{ $innovatorParsed := "netspective_communications" }}
+        {{ $url := print "/data/evaluation_facets/" $innovatorParsed "_institution_conf.json" }}
+        {{ range $facets := getJSON $url }}
+        {{ $typeData := lower (replace .type " " "-" ) }}
+        {{ range .options }}                   
+        {{ $templateData := replace (replace .template ".facet-lhc-form.json" "")  "-facet.lhc-form.json" "" }}
+
+
+        $("#{{ $typeData }}-submit").on("click", function (e,container) {
+          e.preventDefault();
+          if (getCookie('personid') !== null) {
+            $("#{{ $typeData }}-submit").prop('disabled', true);
+            var dat = LForms.Util.getFormData(container, false, false, true);
+            var enc = JSON.stringify(dat);
+            //enc = enc.replace(/"/g, '\\"');
+            var enc1 = JSON.stringify(enc);
+            enc1 = enc1.substr(1).slice(0, -1);
+            var userEmail = getCookie('userEmail');
+            var firstName = getCookie('firstname');
+            var session = getCookie('sessionId');            
+            var category = $(this).attr('data-app');
+            var template = '{{ $templateData }}';
+            var name = '{{ .displayName }}'; 
+            var offeringId='{{ $.Scratch.Get "productId"  }}';           
+            
+            console.log("mutation{\n  addFacets(authorization:{\n    sessionID:\"" + session + "\"\n  },facetInstance:{\n    facetInstance:\"" + enc1 + "\"\n    name:\"" + name +"\"\n    template:\"" + template +"\"\n    category:\"" + category +"\"\n    offeringId:\""+ offeringId +"\"\n  }){\n    status\n    message\n  }\n}");
+
+            var serviceData = { "url": "{{ $.Site.Params.GraphQLUrl }}", "method": "POST", "query": "mutation{\n  addFacets(authorization:{\n    sessionID:\"" + session + "\"\n  },facetInstance:{\n    facetInstance:\"" + enc1 + "\"\n    name:\"" + name +"\"\n    template:\"" + template +"\"\n    category:\"" + category +"\"\n    offeringId:\""+ offeringId +"\"\n  }){\n    status\n    message\n  }\n}" };
+            ajaxPageServiceCall.serviceCall(serviceData).then(response => {
+              $("#formContainer-{{ $typeData }}").html('');
+              $("#formContainer-{{ $typeData }}").hide();
+              $("#{{ $typeData }}-submit").prop('disabled', false);
+              $("#{{ $typeData }}-submit").hide();
+              $("#{{ $typeData }}-cancel").hide();
+              $("#return-sucess-{{ $typeData }}").html('');
+              $("#return-sucess-{{ $typeData }}").html('Thank you for submitting this Facet with Medigy. Our expert panel will review and publish your submission to Medigy. We will notify you when your reported integration goes live.');
+              $("#return-sucess-{{ $typeData }}").show();
+             
+            })
+                .catch(error => {
+                    console.log(error);
+                });
+          }
+        });
+
+        {{ end }}
+        {{ end }}
+
+ });
+</script>
+  <!-- NEW OFFERING HTML starts here -->
+<section class="detail-wrapper offering-page">
+<div itemscope itemtype = "http://schema.org/WebSite"> <!-- schema website open -->
+<div itemprop = "material" itemscope itemtype = "https://schema.org/Product"><!-- schema product open -->
+    <article class="new-ofering-row-1">
+      <div class="container">
+        {{ partial "bread-crumb.html" . }}
+
+        <div class="new-ofer-header row">
+          <div class="col-lg-6 pl-5">
+            <div class="row new-ofer-header-left">
+              {{ if (isset .Params "offeringlogo") }}{{ if (isset .Params "bgcolor")}} {{ $imagDivWidth := 8}} {{ $backgroundColor := .Params.bgcolor}}
+              <div class="col-md-3 col-sm-4" style="background-color:{{ $backgroundColor }}">
+                <img class="img-responsive mt-3" src="{{ .Params.offeringlogo }}" alt="" onerror="this.onerror=null; this.src='/img/featured/offering-logo-thumb-default.png'">
+              </div>
+
+              <div class="col-md-9 col-sm-{{ $imagDivWidth }}">
+                {{ else }} {{ $backgroundColor := "#fff" }} {{ $imagDivWidth := 8}}
+                <div class="col-md-3 col-sm-4" style="background-color:{{ $backgroundColor }}">
+                  <img class="img-responsive mt-3" src="{{ .Params.offeringlogo }}" alt="" onerror="this.onerror=null; this.src='/img/featured/offering-logo-thumb-default.png'">
+                </div>
+                <div class="col-md-9 col-sm-{{ $imagDivWidth }}">
+                  {{ end }} {{ else }} {{ $imagDivWidth := 12}}
+                  <div class="">
+                    {{ end }}
+                    {{ if ne (.Params.organization) "null" }}
+                    <h4>{{ .Params.organization }}</h4>
+                    {{ end }}
+                    <h2  itemprop="name" >{{ .Title }} {{ if (eq .Params.claimStatus "true") }}
+                      <div class="new-ofer-ico-1 green">
+                        <span>
+                          <i class="fas fa-check" title="Owner Verified"></i>
+                        </span>
+                      </div>
+                      {{ end }} {{ if (ne .Params.githubUrl "Nil") }}
+                      <a href="{{ .Params.githubUrl }}">
+                        <div class="new-ofer-ico-1">
+                          <span>
+                            <i class="fas fa-code-branch"></i>
+                          </span>
+                        </div>
+                      </a>
+                      {{ end }}
+                    </h2>
+                    {{ if isset .Params "caption" }}
+                    <p>{{ .Params.caption }}</p>
+                    {{ end }}
+                    <p>{{ .Params.shortdescription }}</p>
+                    {{ if isset .Params "categories" }}
+                      <div class=" topics-tag-row text-left">
+                        {{ range $key, $value := .Params.categories }} {{if ne $value "null"}}
+                        <span class="topics-tag-style-1"><a href="/topic/{{ $value | urlize  }}">{{ $value }}</a></span>
+                        {{ end }} {{ end }}
+                      </div>
+                      {{ end }}
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="new-ofer-header-right">
+                  <div class="new-ofer-header-right-col-1">
+                    <!--<button class="new-ofer-btn-1 blue"><i class="fas fa-plus"></i> Add to Wishlist</button>-->
+                    <!--<a href="#." class="new-ofer-btn-1 ">
+                      <i class="fas fa-question"></i> Ask a question</a>-->
+                       <a id = "addtoilm"   href="#." class="new-ofer-btn-1 loginCheckforIlm" data-toggle="modal" data-target="#addNewsIlm">
+                         
+                      <i class="fas fa-plus-circle"></i> Add to ILM Project</a>
+
+                    <a href="#." class="new-ofer-btn-1 editProduct" data-app="{{.Params.id}}" style="display: none;" data-tenantId='{{.Params.tenantId}}'>
+                      <i class="fas fa-pencil-alt"></i> Edit</a>
+                      <a href="{{ $.Site.Params.raUrl }}offering/{{ .Params.id }}" target="_blank" class="new-ofer-btn-1 edit-in-dqa-product" data-app="{{.Params.id}}" style="display: none;" data-tenantId='{{.Params.tenantId}}'>
+                      <i class="fas fa-pencil-alt"></i> Edit in DQA</a>
+                    <!--<a href="#." class="new-ofer-btn-1">
+                      <i class="fas fa-cog"></i> More
+                      <i class="fas fa-caret-down"></i>
+                    </a>-->
+                  
+                  </div>
+                  <div class="new-ofer-header-right-col-2 row">
+                    <div class="col-lg-6">
+
+                      <div id="tenantIdForClaimDiv">
+                        <div id="claimProductMessage" class="alert alert-success" style="display: none;"></div>
+                        <form name="claimimgForm" id="claimimgForm" style="display:none;">
+                          <div class="form-group row">
+                            <label for="email" class="col-sm-12">Organization</label>
+                            <div class="col-sm-12">
+                              <select class="form-control" name="tenantIdForClaim" id="tenantIdForClaim">
+
+                              </select>
+                            </div>
+                          </div>
+                          <div class="text-left">
+                            <input type="submit" value="Claim Offering" id="claimOfferingButton" class="btn btn-primary" productName="{{ .Title }}" productId="{{ .Params.id }}">
+                            <input type="button" value="Cancel" id="claimOfferingCancel" class="btn btn-primary">
+                            
+                          </div>
+
+                        </form>
+
+
+                      </div>
+
+                      {{ $productId:= .Params.id }}
+                      {{ $productName:=  .Title  }}
+
+                      {{ if eq .Params.offeringType "Product" }}
+                      {{ $.Scratch.Set "OfferingVariable" "developer" }}
+                     {{ end }}
+                      {{ if eq .Params.offeringType "Service" }} 
+                      {{ $.Scratch.Set "OfferingVariable" "provider" }}
+                      {{ end }} 
+                      {{ if eq .Params.offeringType "Solution" }} 
+                      {{ $.Scratch.Set "OfferingVariable" "provider" }}
+                      {{ end }} 
+                      {{ $OfferingVariable := $.Scratch.Get "OfferingVariable" }}
+                      {{ if ne .Params.organization "" }} 
+                      {{ $.Scratch.Set "organization" .Params.organization }}
+                      {{ else }} 
+                      {{ $organization := print "this " .Params.offeringType}}
+                      {{ $.Scratch.Set "organization" $organization }}
+                      {{ end }}  
+                      {{ $organizationData := $.Scratch.Get "organization" }}
+
+                      {{ $productType := .Params.offeringType }}
+                      {{ range first 1 .Site.Data.offering_data_lhc_form.items }}
+                        {{ range first 1 .items }}
+                          {{ range .items }}
+                            {{ $outermostDivId:= .questionCode }}
+                            {{ $anchorTagClass:= .prefix }}  
+                            {{ $title := replace (replace .question "<provider>" $OfferingVariable) "<organization>" $organizationData }}
+                            {{ $anchorTagId:= .questionCode }}                         
+                            {{ range .answers }}
+                              {{ $.Scratch.Set "subtitle"  .text }}
+                              {{ $.Scratch.Set "innerDivId"  .code }}
+                              {{ $.Scratch.Set "innerDivClass"  .label }}
+                            {{ end }}
+                            {{ $subtitle := $.Scratch.Get "subtitle" }}
+                            {{ $subtitle := replace $subtitle "<offeringType>" $productType }}
+                            {{ $innerDivId := $.Scratch.Get "innerDivId" }}
+                            {{ $innerDivClass := $.Scratch.Get "innerDivClass" }}
+                            {{ partial "offering-claim-invite-widget" (dict  "title"  $title  "subtitle" $subtitle  "outermostDivId" $outermostDivId  "anchorTagClass" $anchorTagClass  "anchorTagId" $anchorTagId  "productId" $productId "productName" $productName "innerDivId" $innerDivId "innerDivClass" $innerDivClass  ) }}                            
+                            {{ end }}
+                          
+                        {{ end }}
+  
+                      {{ end }}
+
+
+                    </div>
+                    <div class="col-lg-6">
+                      {{ if ne .Params.organization "" }} 
+                        {{ $.Scratch.Set "organizatoProduct" .Params.organization }}
+                         
+                      {{ else }} 
+                         {{ $offeringType := print "this " .Params.offeringType }}
+                         {{ $.Scratch.Set "organizatoProduct"  $offeringType}}
+                      {{ end }}
+                      {{ $organizatoProduct := $.Scratch.Get "organizatoProduct"}}
+                      {{ $.Scratch.Set "inviteCounter"  0 }}
+                      {{ range first 1 .Site.Data.offering_data_lhc_form.items }}
+                        {{ range first 2 .items }}
+                          {{ $inviteCounter := $.Scratch.Get "inviteCounter" }}
+                          {{ if  eq $inviteCounter 1}}
+                            {{ range .items }}
+                              {{ $outermostDivId:= .questionCode }}
+                              {{ $anchorTagClass:= .prefix }}  
+                              {{ $title := replace .question "<offeringType>" $organizatoProduct}}
+                              {{ $anchorTagId:= .questionCode }}                         
+                              {{ range .answers }}
+                                {{ $.Scratch.Set "subtitle"  .text }}
+                                {{ $.Scratch.Set "innerDivId"  .code }}
+                                {{ $.Scratch.Set "innerDivClass"  .label }}
+                              {{ end }}
+                              {{ $subtitle := $.Scratch.Get "subtitle" }}
+                              {{ $innerDivId := $.Scratch.Get "innerDivId" }}
+                              {{ $innerDivClass := $.Scratch.Get "innerDivClass" }}
+                              {{ partial "offering-claim-invite-widget" (dict  "title"  $title  "subtitle" $subtitle  "outermostDivId" $outermostDivId  "anchorTagClass" $anchorTagClass  "anchorTagId" $anchorTagId  "productId" $productId "productName" $productName "innerDivId" $innerDivId "innerDivClass" $innerDivClass  ) }}                                                        
+                             {{ end }}
+                           {{ end }}
+                           {{ $.Scratch.Add "inviteCounter" 1 }}
+                         {{ end }}
+                       {{ end }}
+  
+
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+<div itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
+    <article class="new-ofering-row-2">
+      <div class="container">
+        <div class="new-ofering-row-2-cell">
+          <!--
+          <div class="github-row fas fa-tachometer-alt">
+            <a href="#.">
+              <div class="github-count ofer-ttl-1">
+                <span>Score
+                  <i class="fas fa-caret-down"></i>
+                </span>
+              </div>
+            </a>
+            <div class="github-count ">
+              <span class="hunt-comm-count" id="gitScore_{{.Params.id}}">100%</span>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+        -->
+
+        {{ $productId := .Params.id }}          
+        {{ $productName := .Title }}
+        {{ $countInFrontmatter := 0 }}
+        {{ $urlAjax  := $.Site.Params.GraphQLUrl }}
+        {{ range first 1 .Site.Data.offering_data_lhc_form.items }}
+          {{ range last 1 .items }}
+            {{ range first 4 .items}}
+              {{ $label := .question }}
+              {{ $outerDivClass := .prefix.outerDivClass }}
+              {{ $anchorTagId := .questionCode }}
+              {{ $anchorTagClass := .prefix.anchorTagClass }}
+              {{ $spanId := .prefix.spanId }}
+              {{ $countDivId := .prefix.countDivId }}
+              {{ $countSpanId := .prefix.countSpanId }}
+              {{ $MetricName := .localQuestionCode }}
+              {{ $globalStatusVar := .prefix.globalStatusVar }}
+              {{ $metricKeyId := .prefix.metricKeyId }}
+              {{ $tooltip := .prefix.tooltip }}
+              {{ $metricKeyName := .prefix.metricKeyName }}
+              {{ $type := .prefix.type }}
+              {{ partial "cadds-common" (dict  "label"  $label  "outerDivClass" $outerDivClass  "anchorTagId" $anchorTagId  "anchorTagClass" $anchorTagClass   "productId" $productId "productName" $productName "spanId" $spanId "countDivId" $countDivId  "countSpanId" $countSpanId "countInFrontmatter" $countInFrontmatter "MetricName" $MetricName "urlAjax" $urlAjax "globalStatusVar" $globalStatusVar "metricKeyId" $metricKeyId "metricKeyName" $metricKeyName "tooltip" $tooltip "type" $type) }}  
+            {{ end }}
+
+          {{ end }}
+        {{ end }}
+
+        {{ range first 1 .Site.Data.offering_data_lhc_form.items }}
+          {{ range last 1 .items }}
+            {{ range last 1 .items}}
+              {{ $label := .question }}
+              {{ $outerDivClass := .prefix.outerDivClass }}
+              {{ $innerDivClass := .prefix.innerDivClass }}
+              {{ $countDivClass := .prefix.countDivClass }}
+              {{ $countDivId := .prefix.countDivId }}
+              {{ $countSpanId := .prefix.countSpanId }}
+              {{ $countInFrontmatter := 0 }}          
+              {{ $tooltip := .prefix.tooltip }}
+              {{ partial "question-asked-offering" (dict  "label"  $label  "outerDivClass" $outerDivClass "innerDivClass" $innerDivClass  "productId" $productId "productName" $productName "countDivId" $countDivId "countDivClass" $countDivClass "countSpanId" $countSpanId "tooltip" $tooltip ) }}
+              {{ end }}
+
+          {{ end }}
+        {{ end }}
+      
+
+       <!-- Modal > Add to Project -->
+<div class="modal fade" id="addNewsIlm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+    <div class="modal-body text-left">
+      <article class="post-login">
+         
+          <h2>Add Offering to ILM Projects</h2>
+          <div class="form-group row">
+            <label class="col-sm-12">Select Project</label>
+            <div class="col-sm-12">
+              <div class="row">
+                  <div class="col-md-12">
+                  <select onchange="myArrayListcheck()" class="form-control" id = "projectlist" required>
+                       
+                    </select>
+                  </div>
+                  <div style = "display:none;" class="col-md-5"><a id = "add-project" href="#." class="text-right text-primary d-block" data-toggle="modal" data-target="#addnewproject"><u>Not in List, Add Project</u></a></div>
+                </div>
+            </div>
+          </div>
+
+         <div id = "alertMessageIlm" class="alert alert-danger pt-1  pb-1 m-2" style = "display:none;"> 
+         <span class="ilm-pr-modal-message-title">{{ .Title }} exists in selected ILM Project </span>
+         </div>  
+
+          <div class="form-group row">
+            <label class="col-sm-12">Description</label>
+            <div class="col-sm-12">
+              <textarea id = "projectcmnts" class="form-control" required></textarea>
+            </div>
+          </div>
+
+          <input type="hidden" name="formentry" id="formentry" value="true">
+          <div class="text-left">
+              <input id = "offeringrelationbtn" type="submit" value="SAVE" class="btn btn-primary Form_Login_Button">
+              <a href="#" id="canccel" class="btn btn-light" data-dismiss="modal"><strong>Cancel</strong></a>
+              <span id = "offerAddedMessage"  class="text-center green" role="alert"></span>
+              
+          </div>
+         
+
+      </article>
+
+
+      <span id="errorcode"></span>
+
+    </div>   
+  </div>
+</div>
+</div>
+<!-- Modal > Add to Project ends -->
+          <div class="clearfix"></div>
+        </div>
+      </div>
+    </article>
+
+</div><!-- schema aggregate close -->
+</div><!-- schema product close -->
+</div><!-- schema website close -->
+
+
+ <!-- 11-11-2019  condition fot not display -->
+  {{ if (ne .Params.sub "inst") }}
+    <article class="new-ofering-row-3">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="row">
+                <div class="col-lg-6">
+                  <div class="new-ofering-row-3-left-cell-1 no-border">
+              {{ if isset .Params "caption" }}
+              <h3>{{ .Params.caption }}</h3>
+              {{ end }}
+              <p class="ofer-see-more-short">
+               {{ .Content }}              
+              </p>
+              <div class="collapse" id="collapseExample">
+                {{ .Content }}
+              </div>
+              <div class="new-ofer-seemore-share-row row">
+                <div class="col-xs-6 ofer-see-more-social-globe">
+                  {{ if ne .Params.websiteUrl "Nil" }}
+                  <a href="{{ .Params.websiteUrl }}" target="_blank">
+                    <span id="Product_Website">
+                      <i class="fas fa-globe"></i>
+                    </span>
+                  </a>
+                  {{ end }}
+                  <a href="{{ .Params.websiteUrl }}" target="_blank" class="ofer-see-more Product_See_More_Button"  role="button" aria-expanded="false">
+                    See more
+                  </a>
+                </div>
+                <div class="col-xs-6 ofer-see-more-social">
+                  {{ if ne .Params.githubUrl "Nil" }}
+                  <a href="{{ .Params.githubUrl }}" target="_blank">
+                    <span>
+                      <i class="fab fa-github"></i>
+                    </span>
+                  </a>
+                  {{ end }} {{ if ne .Params.facebookUrl "Nil" }}
+                  <a href="{{ .Params.facebookUrl }}" target="_blank">
+                    <span id="Product_Facebook">
+                      <i class="fab fa-facebook"></i>
+                    </span>
+                  </a>
+                  {{ end }} {{ if ne .Params.twitterUrl "Nil" }}
+                  <a href="{{ .Params.twitterUrl }}" target="_blank">
+                    <span id="Product_Twitter">
+                      <i class="fab fa-twitter"></i>
+                    </span>
+                  </a>
+                  {{ end }}{{ if ne .Params.linkedinUrl "Nil" }}
+                  <a href="{{ .Params.linkedinUrl }}" target="_blank">
+                    <span id="Product_LinkedIn">
+                      <i class="fab fa-linkedin"></i>
+                    </span>
+                  </a>
+                  {{ end }} {{ if ne .Params.instagramUrl "Nil" }}
+                  <a href="{{ .Params.instagramUrl }}" target="_blank">
+                    <span id="Product_Instagram">
+                      <i class="fab fa-instagram"></i>
+                    </span>
+                  </a>
+                  {{ end }}{{ if and (ne .Params.youtubeUrl "Nil") (isset .Params "youtubeurl") }}
+                  <a href="{{ .Params.youtubeUrl }}" target="_blank">
+                    <span>
+                      <i class="fab fa-youtube"></i>
+                    </span>
+                  </a>
+                  {{ end }}
+                </div>
+              </div>
+            </div>
+                </div>
+                <div class="col-lg-6">
+            <div class="ofering-featured-row">
+              <!--<div class="row ofering-featured-top">
+                <div class="col-xs-10">
+                  <h4>Featured Images and Videos</h4>
+                </div>
+                <div class="col-xs-2">
+                  <div class="ofering-featured-arrow">
+                      <a href="#."><span><i class="fas fa-chevron-left"></i></span></a>
+                      <a href="#."><span><i class="fas fa-chevron-right"></i></span></a>
+                    </div>
+                </div>
+              </div>-->
+              {{ if ne .Params.featuredimage "Nil" }}
+              <div class="ofering-featured-image">
+                <img src="{{ .Params.featuredimage }}" class="img-responsive" alt="" onerror="this.onerror=null; this.src='/img/featured/default.png'">
+              </div>
+              <!--<div class="row ofering-featured-thumbs">
+                    <div class="col-xs-3"><a href=""><img src="/images/new-offering-featured-image.jpg" alt=""></a></div>
+                    <div class="col-xs-3"><a href=""><img src="/images/new-offering-featured-image.jpg" alt=""></a></div>
+                    <div class="col-xs-3"><a href=""><img src="/images/new-offering-featured-image.jpg" alt=""></a></div>
+                    <div class="col-xs-3"><a href=""><img src="/images/new-offering-featured-image.jpg" alt=""></a></div>
+                  </div>-->
+              {{ else}}
+              <div class="ofering-featured-image">
+                <img src="/img/featured/default.png" class="img-responsive" alt="">
+              </div>
+              {{ end }}
+            </div>
+            {{ if isset .Params "documents"}}
+            <div class="doc-resources-row">
+              <h4>Other documents and resources</h4>
+              <div class="row">
+                <div class="col-md-6">
+                  <a href="#.">
+                    <div class="doc-resource-cell">
+                      <div class="doc-resource-col-1">
+                        <img src="/images/doc-resorce-ico-1.png" alt="" class="img-responsive" >
+                      </div>
+                      <div class="doc-resource-col-2">
+                        <span class="titl-1">Whitepapers</span>
+                        <span class="titl-2">Whitepapers and ebooks</span>
+                      </div>
+                      <div class="doc-resource-col-3">
+                        <span>
+                          <i class="fas fa-chevron-right"></i>
+                        </span>
+                      </div>
+                      <div class="clearfix"></div>
+                    </div>
+                  </a>
+                </div>
+                <div class="col-md-6">
+                  <a href="#.">
+                    <div class="doc-resource-cell">
+                      <div class="doc-resource-col-1">
+                        <img src="/images/doc-resorce-ico-2.png" alt="" class="img-responsive">
+                      </div>
+                      <div class="doc-resource-col-2">
+                        <span class="titl-1">Case Studies</span>
+                        <span class="titl-2">good references</span>
+                      </div>
+                      <div class="doc-resource-col-3">
+                        <span>
+                          <i class="fas fa-chevron-right"></i>
+                        </span>
+                      </div>
+                      <div class="clearfix"></div>
+                    </div>
+                  </a>
+                </div>
+                <div class="col-md-6">
+                  <a href="#.">
+                    <div class="doc-resource-cell">
+                      <div class="doc-resource-col-1">
+                        <img src="/images/doc-resorce-ico-3.png" alt="" class="img-responsive">
+                      </div>
+                      <div class="doc-resource-col-2">
+                        <span class="titl-1">Product Sheets</span>
+                        <span class="titl-2">who, what, how?</span>
+                      </div>
+                      <div class="doc-resource-col-3">
+                        <span>
+                          <i class="fas fa-chevron-right"></i>
+                        </span>
+                      </div>
+                      <div class="clearfix"></div>
+                    </div>
+                  </a>
+                </div>
+                <div class="col-md-6">
+                  <a href="#.">
+                    <div class="doc-resource-cell">
+                      <div class="doc-resource-col-1">
+                        <img src="/images/doc-resorce-ico-4.png" alt="" class="img-responsive">
+                      </div>
+                      <div class="doc-resource-col-2">
+                        <span class="titl-1">Tour Deck</span>
+                        <span class="titl-2"></span>
+                      </div>
+                      <div class="doc-resource-col-3">
+                        <span>
+                          <i class="fas fa-chevron-right"></i>
+                        </span>
+                      </div>
+                      <div class="clearfix"></div>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+            {{ end }}
+          </div>
+            </div>
+            <div class="new-ofering-row-3-left-cell-2">
+              <div class="row ml-0">
+                {{ if isset .Params "targetcustomer" }}
+                <ul class="col-md-12 topic-list">
+                  <li class="ofer-list-1-ttl">Developed for</li>
+                  <li class="green-txt">{{ .Params.targetCustomer }}</li>
+                </ul>
+                {{ end }} {{ if isset .Params "fhircompatibility" }}
+                <ul class="col-md-12 topic-list">
+                  <li class="ofer-list-1-ttl">FHIR Compatibility</li>
+                  <li class="green-txt">
+                    {{ range $key, $value := .Params.fhirCompatibility }} {{ $value }}{{ ", "}} {{ end }}
+                  </li>
+                </ul>
+                {{ end }}
+                
+                {{ if isset .Params "categories" }}
+                 {{ range $key, $value := .Params.categories }} 
+                  {{if ne $value "null"}}
+                    {{ $.Scratch.Set "title" (replace  $value " "  "") | lower }}                 
+                  {{ end }}
+                 {{ end }}
+                {{ end }}
+                <ul class="col-md-12 topic-list related-top-list">
+                  <li class="ofer-list-1-ttl realated-topic bold mb-0 pb-2">Related Topics</li>
+                 
+                  {{ range .Site.Data.category }}
+                
+                  {{ if eq .subclasslabel "null" }}
+                    {{ $.Scratch.Set "label" .label }}
+                  {{ else}}
+                    {{ $.Scratch.Set "label" .subclasslabel }}
+                  {{ end }}
+                  {{ $label := $.Scratch.Get "label" }}
+                  {{ $createdTitle := print .parentclasslabel ": " $label }}
+                  {{ $title := $.Scratch.Get "title" }}
+                  {{ $createdTitle:= (replace  $createdTitle " "  "") | lower }}
+                  {{ $title := (replace  $title " "  "") | lower }}
+                  
+                  {{ if eq $createdTitle $title }}
+                  <li class="green-txt w-100">
+                    {{ range .equalentCollections }}  
+                      {{ $relatedCategory := print .parentclasslabel ": " .label }}   
+                      {{ $relatedCategoryLink := replace (replace $relatedCategory ":" "" | lower) " " "-" }}       
+                       <a href="/topic/{{$relatedCategoryLink}}">{{ $relatedCategory }}</a><span>,</span> 
+                    {{ end }}
+                    </li>
+                  {{ end }}
+                {{ end }}
+                </ul>
+                 {{ if isset .Params "categories" }}
+                 <div  class="ilmProject_offering w-100">
+                
+                  
+                  <div class="ofer-list-1-ttl mb-2 bold">ILM Projects</div> 
+                 
+                  <ul class="col-md-12 topic-list topic-list-2" id = "getallilmProjectList">
+                   
+                 </ul>
+                  <ul  class="col-md-12 topic-list" id = "nililmProjectList">
+            
+                 </ul>
+
+                 </div>
+
+                {{ end }} {{ if isset .Params "specialities" }}
+                <ul class="col-md-12 topic-list">
+                  <li class="ofer-list-1-ttl">Specialties</li>
+                  <li class="green-txt">
+                    {{ range $key, $value := .Params.specialities }} {{ $value }}{{ ", "}} {{ end }}
+                  </li>
+                </ul>
+                {{ end }}
+              </div>
+            </div>
+            {{ if isset .Params "licensing" }}
+            <div class="new-ofering-row-3-left-cell-2">
+              <div class="row">
+                <ul class="col-md-12 topic-list">
+                  <li class="ofer-list-1-ttl">Licensing </li>
+                  <li class="green-txt">{{ .Params.licensing }}</li>
+                </ul>
+              </div>
+            </div>
+            {{ end }}
+
+      
+        
+          
+          {{ $.Scratch.Set "productId"  .Params.id }}
+          {{ $.Scratch.Set "productName"  .Title }}
+          {{ $.Scratch.Set "tenantId"  .Params.tenantId }}
+          {{ $.Scratch.Set "urlAjax"  $.Site.Params.GraphQLUrl }}
+          {{ partial "offering-cadd-questions.html" . }}                   
+          
+		<div class="accordion" id="accordion8">
+		  <div class="card">
+			<div class="card-header" id="heading8">
+			  <h2 class="mb-0">
+				<button class="btn btn-link collapsed" id="quantitative-evaluation" type="button" data-toggle="collapse" data-target="#collapse8" aria-expanded="true" aria-controls="collapseOne">
+				  <i class="fa  fa-list-alt left-icon"></i> Quantitative evaluation
+				  <i class="fa fa-chevron-up right-icon"></i>
+				</button>
+			  </h2>
+			</div>
+			<div id="collapse8" class="collapse show in" aria-labelledby="heading8" data-parent="#accordion8" >
+        <div class="card-body">
+						<article class="new-ofering-row-4">
+						  <div class="tab quantitative-evaluation-tab">
+							<div class="container">
+							  <!-- <button class="tablinks" onclick="openEvaluationFacet(event, 'Product')" id="productFacetTab">Product</button> -->
+                {{ $.Scratch.Set "tagCounter" 0 }}
+                {{ $innovatorParsed := "netspective_communications" }}
+                {{ $url := print "/data/evaluation_facets/" $innovatorParsed "_institution_conf.json" }}
+                {{ $facets := getJSON $url }}
+                {{ range (where (sort $facets "order" "asc") "display" "=" "show") }}
+                  {{ $.Scratch.Add "tagCounter" 1 }}                
+                    {{ $typeData := lower (replace .type " " "-" ) }}
+                    {{ $contr := $.Scratch.Get "tagCounter" }}
+                    {{ if ne $contr 1 }}                  
+                      <button cnt="{{ $contr }}" class="tablinks Product_{{ $typeData }}_Tab active" onclick="openEvaluationFacet(event, '{{ $typeData }}')" id="{{ $typeData }}Tab">{{ .type }}</button>
+                    {{ else }}                     
+                      <button cnt="{{ $contr }}" class="tablinks Product_{{ $typeData }}_Tab" onclick="openEvaluationFacet(event, '{{ $typeData }}')" id="{{ $typeData }}Tab">{{ .type }}</button>
+                    {{ end }}
+                {{ end }}
+                <button class="tablinks Product_suggestion_Tab" onclick="openEvaluationFacet(event, 'suggestion')" id="suggestionTab">Suggestion</button>
+							</div>
+						  </div>
+						  <form>
+              <!--  <input type="hidden" value="0" name="productFacetTabFlag" id="productFacetTabFlag" /> -->
+              {{ $innovatorParsed := "netspective_communications" }}
+              {{ $url := print "/data/evaluation_facets/" $innovatorParsed "_institution_conf.json" }}
+              {{ range $facets := getJSON $url }}
+              {{ $typeData := lower (replace .type " " "-" ) }}
+							<input type="hidden" value="0" name="{{ $typeData }}TabFlag" id="{{ $typeData }}TabFlag" />
+              {{ end }}
+						  </form>
+						  <div class="container">
+							<div id="Product" class="tabcontent">
+
+							  <!--<img src="/img/ajax-loader.gif" width="10%" height="10%">-->
+							  <div id="productEvaluationDetails">
+                  {{ $loaderOuterDivClass := "d-flex justify-content-center" }}
+                  {{ $loaderLabel := "Loading..." }}
+                  {{ $loaderLabelClass := "sr-only" }}
+                  {{ $loaderDivId := print "evaluationFormloading" }}
+                  {{ $loaderDivClass := "spinner-border" }}
+                  {{ partial "spinner-loader.html" (dict  "loaderOuterDivClass"  $loaderOuterDivClass  "loaderLabel" $loaderLabel "loaderLabelClass" $loaderLabelClass "loaderDivId" $loaderDivId "loaderDivClass" $loaderDivClass) }}
+
+
+							  </div>
+
+              </div>
+              {{ $tenantName := "Netspective Communications" }}
+              {{ $innovatorFolder := lower (replace $tenantName " " "-" )}}
+              {{ $innovatorParsed := lower (replace $tenantName " " "_")}}
+              {{ $url := print "/data/evaluation_facets/" $innovatorParsed "_institution_conf.json" }}
+              {{ $offeringTitle := .Title }}
+              {{ range $facets := getJSON $url }}
+              {{ $typeData := lower (replace .type " " "-" ) }}
+              {{ $evaluationFacetsTabName := .type }}
+
+							<div id="{{ $typeData }}" class="tabcontent"> 
+							  <div id="formContainer-{{ $typeData }}-answer" ></div>
+
+							  <article class="facet-bt-wrapper" id="{{ $typeData }}-tab-text">
+								<h3>Share your {{ .type }} with the community</h3>
+                <!--<span>Tell us about your experience with {{ .Params.title}}'s health IT standards</span>-->
+                {{ range .options }} 
+                  {{ $shareInfo := replace .shareInfo "<offering_name>" $offeringTitle }}
+                  {{ $inviteInfo := replace .inviteInfo "<offering_name>" $offeringTitle }}
+                  {{ $templateData := replace (replace .template ".facet-lhc-form.json" "")  "-facet.lhc-form.json" "" }}
+
+                    <div class="facet-bt-row">
+                      <div class="col-md-9 col-sm-9 col-xs-8">
+                      <span class="facet-title" id="{{ $typeData }}StartTitle">{{ $shareInfo }}</span>
+                      <span class="facet-descr" id="{{ $typeData }}StartDescr"></span>
+                      </div>
+                      <div class="col-md-3 col-sm-3 col-xs-4 text-right"> 
+                      <input data-link="/{{ $innovatorFolder }}/{{ $typeData }}/{{.template }}" title="To Fill the Facets Details" data-container="{{ $typeData }}" data-tabid="{{ $typeData }}" class="facet-bt-1 Quantitative_Evaluation_Start startProcessBtn" value="Start" type="submit" name="{{ $templateData }}-start" id="{{ $templateData }}-start" />
+                      </div>
+                      <div class="clearfix"></div>
+                    </div>
+
+                    <div class="facet-bt-row">
+                      <div class="col-md-9 col-sm-9 col-xs-8">
+                      <span class="facet-title" id="{{ $typeData }}InviteTitle">{{ $inviteInfo }}</span>
+                      <span class="facet-descr" id="{{ $typeData }}InviteDescr"></span>
+                      </div>
+                      <div class="col-md-3 col-sm-3 col-xs-4 text-right">
+                      <input data-tabid="{{ $typeData }}" title="Invite the People for Filling the Facets Details" class="facet-bt-2 inviteProcess Quantitative_Evaluation_Invite " value="Invite" type="submit" data-app="{{ $typeData }}" facet-name="{{ .displayName }}" product-name="{{ $offeringTitle }}"
+                        name="{{ $typeData }}-tabforInvite" id="{{ $typeData }}-tabforInvite" />
+                      </div>
+                      <div class="clearfix"></div>
+                    </div>
+
+                    <div class="facet-bt-row">
+                      <div class="col-md-9 col-sm-9 col-xs-8">
+                      <span class="facet-title" id="{{ $typeData }}ViewTitle">To View the Reviews of the Facet Details</span>
+                      <span class="facet-descr" id="{{ $typeData }}ViewtDescr"></span>
+                      </div>
+                      <div class="col-md-3 col-sm-3 col-xs-4 text-right"> 
+                      <input data-product-id="{{ $.Scratch.Get "productId" }}" data-facet-tab-name="{{ $evaluationFacetsTabName }}" data-link="{{.template }}" title="To View the Reviews of Facet Details" data-container="{{ $typeData }}" data-tabid="{{ $typeData }}" class="facet-bt-3 Quantitative_Evaluation_View viewProcessBtn" value="View" type="submit" name="{{ $templateData }}-view" id="{{ $templateData }}-view" />
+                      </div>
+                      <div class="clearfix"></div>
+                    </div>
+
+
+                {{ end }}
+							  </article>
+							  <div class="clearfix"></div>
+                <div id="return-sucess-{{ $typeData }}" class ="return-success"> </div>
+                <div id="evaluation-facets-user-{{ $typeData }}" class ="evaluation-facets-user"> </div>
+
+                <div id="evaluationanswerDetailLoading-{{ $typeData }}" style="display: none;">
+                  {{ $loaderOuterDivClass := "d-flex justify-content-center" }}
+                  {{ $loaderLabel := "Loading..." }}
+                  {{ $loaderLabelClass := "sr-only" }}
+                  {{ $loaderDivId := print "evaluationanswerDetailLoadingInner" $typeData }}
+                  {{ $loaderDivClass := "spinner-border" }}
+                  {{ partial "spinner-loader.html" (dict  "loaderOuterDivClass"  $loaderOuterDivClass  "loaderLabel" $loaderLabel "loaderLabelClass" $loaderLabelClass "loaderDivId" $loaderDivId "loaderDivClass" $loaderDivClass) }}
+
+                </div>
+                <div id="formContainer-{{ $typeData }}" style="display:none;" class="formContainer-lhc">
+                  
+                  {{ $loaderOuterDivClass := "d-flex justify-content-center" }}
+                  {{ $loaderLabel := "Loading..." }}
+                  {{ $loaderLabelClass := "sr-only" }}
+                  {{ $loaderDivId := print "evaluationFormloading" $typeData }}
+                  {{ $loaderDivClass := "spinner-border" }}
+                  {{ partial "spinner-loader.html" (dict  "loaderOuterDivClass"  $loaderOuterDivClass  "loaderLabel" $loaderLabel "loaderLabelClass" $loaderLabelClass "loaderDivId" $loaderDivId "loaderDivClass" $loaderDivClass) }}
+
+
+							  </div>
+							  <div style="text-align:center; display:none;"  id="{{ $typeData }}-button-div" class="button-div">
+                  <input data-app="{{ $typeData }}" value="Submit" type="submit" name="{{ $typeData }}-submit" id="{{ $typeData }}-submit" class="btn btn-primary add-new-bt Quantitative_Evaluation_Submit" data-id ='{{ .Params.id }}' />
+                  <input data-app="{{ $typeData }}" value="Cancel" type="button" name="{{ $typeData }}-cancel" id="{{ $typeData }}-cancel" class="btn btn-primary add-new-bt Quantitative_Evaluation_Cancel" />
+							  </div>
+							</div>
+              {{ end }}
+
+
+							<div id="suggestion" class="tabcontent">
+							  <div id="quntitative-suggestion-form">
+								<!--- Feedback form starts-->
+								<header class="post-header">
+								  <h1 class="post-title">Share your suggestions</h1>
+								  <div class="">
+									Thank you for taking a moment to give us feedback on {{ .Title }}. Your advice or suggestions will be much appreciated and
+									welcomed.
+								  </div>
+								</header>
+
+								<form name="feedbackproduct" id="feedbackproduct" action="#">
+								  <aside>
+
+									<div class="form-group row col-md-12 " style="display:none;">
+									  <label class="col-md-3">Support Type</label>
+									  <div class="col-md-3">
+										<select id="feedbacktype" name="feedbacktype" class="form-control" required>
+										  <option value="Looking for Something" selected>Looking for Something</option>
+
+										</select>
+									  </div>
+									</div>
+
+									<div class="form-group row col-md-12 ">
+									  <div class="col-md-4">Summarize briefly how to improve {{ .Title }}</div>
+									  <div class="col-md-8">
+										<input class="form-control" name="feedbackproductsubject" id="feedbackproductsubject" type="text" required>
+									  </div>
+									</div>
+
+									<div class="form-group row col-md-12 ">
+									  <div class="col-md-4">Please elaborate and provide any detail, so we can assist you in a better way</div>
+									  <div class="col-md-8">
+										<textarea rows="5" name="feedbackproductdesc" id="feedbackproductdesc" class="form-control" required></textarea>
+									  </div>
+									</div>
+									<!--- Replacing div for offering starts here-->
+
+									<div class="form-group row col-md-12 ">
+									  <div class="col-md-4"> </div>
+									  <div class="col-md-8">
+										<input value="Submit" type="submit" class="btn btn-primary add-new-bt Product_Suggesions_Submit" name="productfeedbacksubmit" id="productfeedbacksubmit">
+										<input value="Cancel" type="submit" class="btn btn-primary add-new-bt grey-bg-bt Product_Suggesions_Cancel" name="feedbackcancel" id="feedbackcancel">
+									  </div>
+									</div>
+
+									<div class="clearfix"></div>
+
+									<div class="text-center">
+									  <div id="productfeedback-sucess"> </div>
+
+									</div>
+								  </aside>
+								</form>
+								<!--- Feedback form end-->
+							  </div>
+							</div>
+
+						  </div>
+						</article>
+									  </div>
+								</div>
+							  </div>
+					 </div>
+		  
+		  
+      </div>
+          
+        </div>
+
+        <!--<div class="new-ofer-header-left">
+          <div class="new-ofer-header-left-col-1" style="text-align: center;">          -->
+            <!-- http://dqa.bzo.medigy.com/#/noDescriptionOferings/{{ .Params.id }}/show   {{ $.Site.Params.raUrl }}{{ .Params.id }}?pending=false-->
+            <!--<a href="javascript:void(0);" class="new-ofer-btn-1 editRaProduct"  data-app="{{.Params.id}}"
+              title="The unique identifier of this offering" style="text-decoration: none !important; color:#222 !important;cursor: default;">
+              <i class="fas fa-pencil-alt"></i>Product Identifier: {{ .Params.id }}</a>-->
+        
+          <!--</div>-->
+        <!--</div>-->
+
+        <div class="isso-comment pb-3">
+         <section id="isso-thread" data-title = "medigy-comment"  data-isso-id=""></section>
+         <div class="clearfix"></div>
+        </div>
+      </div>
+    </article>
+
+    {{ end }}
+    <!-- 11-11-2019  condition fot not display -->
+  </section>
+  <!-- NEW OFFERING HTML ends here -->
+
+
+  {{ if (not (isset .Params "pagetype")) }}
+  <script src="/js/jquery.min1.10.2.js"></script>
+  <script>
+      $(window).bind("load", function () {
+        var updatedData;
+        var post_id = $(".fb_share_count").attr("data-app");
+        //console.log("query{\n  getPrometheusData(inputData:\"" + post_id + "\",inputType:\"all\"){\n    status\n    data{\n      metric{\n        name\n        job\n        id\n        createdOn\n        updatedOn\n        status\n        source\n        personId\n        type\n        typeName\n      }\n      value\n    }\n  }\n}");
+        
+        var serviceData = { "url": "{{ $.Site.Params.GraphQLUrl }}", "method": "GET", "query": "query{\n  getPrometheusData(inputData:\"" + post_id + "\",inputType:\"all\"){\n    status\n    data{\n      metric{\n        name\n        job\n        id\n        createdOn\n        updatedOn\n        status\n        source\n        personId\n        type\n        typeName\n      }\n      value\n    }\n  }\n}" };
+            ajaxPageServiceCall.serviceCall(serviceData).then(updatedData => {
+
+              var totalUpvote = 0;
+          for (key in updatedData.data.getPrometheusData.data) {
+            //console.log(post_id);
+            if (updatedData.data.getPrometheusData.data[key].metric.id == post_id && updatedData.data.getPrometheusData.data[key].metric.name == 'medigy_total_upvote_count') {
+              totalUpvote += parseInt(updatedData.data.getPrometheusData.data[key].value[1]);
+            }
+
+          }
+          if (totalUpvote != 0)
+            $(".hunt-comm-count").html(totalUpvote);
+          //$(".upvote-ttl").html('<i class="fa fa-arrow-up"></i> ' + totalUpvote);
+          var totalWatch = 0;
+          for (key in updatedData.data.getPrometheusData.data) {
+            //console.log(post_id);
+            if (updatedData.data.getPrometheusData.data[key].metric.id == post_id && updatedData.data.getPrometheusData.data[key].metric.name == 'medigy_watch_status') {
+              totalWatch += parseInt(updatedData.data.getPrometheusData.data[key].value[1]);
+            }
+
+          }
+          if (totalWatch != 0)
+            $(".watch_count").html(totalWatch);
+
+          //console.log(post_id);
+          //$(this).find(".b").html(post_id);
+
+          var totalFbShare = 0;
+          for (key in updatedData.data.getPrometheusData.data) {
+            //console.log(post_id);
+            if (updatedData.data.getPrometheusData.data[key].metric.id == post_id && updatedData.data.getPrometheusData.data[key].metric.name == 'medigy_total_facebook_share_count') {
+              totalFbShare += parseInt(updatedData.data.getPrometheusData.data[key].value[1]);
+            }
+
+          }
+          if (totalFbShare != 0)
+            $(".fb_share_count").html(totalFbShare);
+
+          //console.log(post_id);
+          //$(this).find(".b").html(post_id);
+
+          var totalEmail = 0;
+          for (key in updatedData.data.getPrometheusData.data) {
+            //console.log(post_id);
+            if (updatedData.data.getPrometheusData.data[key].metric.id == post_id && updatedData.data.getPrometheusData.data[key].metric.name == 'medigy_total_email_share_count') {
+              totalEmail += parseInt(updatedData.data.getPrometheusData.data[key].value[1]);
+            }
+
+          }
+          if (totalEmail != 0)
+            $(".email_count").html(totalEmail);
+
+
+          var gitUrl = '{{ .Params.githubUrl }}';
+          if (gitUrl != 'Nil') {
+
+            var serviceData = { "url": "{{ $.Site.Params.GraphQLUrl }}", "method": "GET", "query": "query{\n  getPrometheusData(inputData:\"" + gitUrl + "\",inputType:\"git\"){\n    status\n    data{\n      metric{\n        name\n        job\n        id\n        createdOn\n        updatedOn\n        status\n        source\n        personId\n        type\n        typeName\n      }\n      value\n    }\n  }\n}" };
+            ajaxPageServiceCall.serviceCall(serviceData).then(response => {
+              $('#gitStars').html(response.data.getPrometheusData.data[3].value[1]);
+              $('#gitWatcher').html(response.data.getPrometheusData.data[4].value[1]);
+
+            })
+                .catch(error => {
+                    console.log(error);
+                });
+
+
+
+          }
+
+          {{ if ne .Params.twitterUrl "Nil" }}
+
+          var twitterUrl = '{{.Params.twitterUrl }}'
+          var screenName = twitterUrl.split('twitter.com/');
+          var screenName = screenName[1].replace(/\\/gi, '');
+
+          var serviceData = { "url": "{{ $.Site.Params.GraphQLUrl }}", "method": "GET", "query": "query{\n  getTwitterDetails(inputData:\"" + screenName + "\"){\n    id\n    name\n    screenName\n    followersCount\n status\n }\n}" };
+            ajaxPageServiceCall.serviceCall(serviceData).then(response => {
+              if (response.data.getTwitterDetails.status == 'Success' && response.data.getTwitterDetails.followersCount != 0)
+              $(".twitter_count").html(response.data.getTwitterDetails.followersCount);
+            })
+                .catch(error => {
+                    console.log(error);
+                });
+
+          {{ end }}
+
+
+            })
+                .catch(error => {
+                    console.log(error);
+                });        
+      });
+
+
+
+  </script> 
+  {{end}}
+<script>
+      $(document).ready(function () {
+        $(".realated-topic").each(function()
+          {
+          if($(this).parent().find('.green-txt').children('a').length == 0)
+          {
+          $(this).hide();
+          }else{
+          $(this).show();
+          }
+          });
+
+
+
+        /// In order to add attribut traget blank to the read more link starts here
+
+        $(".single-block-left a").attr({ "target": "_blank" });
+
+        /// In order to add attribut traget blank to the read more link ends here
+
+
+        var personid = getCookie('personid');
+ 
+        
+
+        if (personid != null) {
+          $(".fb-share-push").each(function () {
+            var safeUrl = $(this).attr("data-safe-url");
+            var shareUrl = "https://www.facebook.com/sharer/sharer.php?u={{ $.Site.Params.socialshare }}" + safeUrl;
+            $(this).attr('href', shareUrl);
+            $(this).addClass('fb-share');
+          });
+          $(".twitter-share-push").each(function () {
+            var safeUrl = $(this).attr("data-safe-url");
+            var shareUrl = "https://twitter.com/home?status={{ $.Site.Params.socialshare }}" + safeUrl;
+            $(this).attr('href', shareUrl);
+            $(this).addClass('fb-share');
+          });
+          $(".email-share-push").each(function () {
+            var safeUrl = $(this).attr("data-safe-url");
+            var shareUrl = "mailto:?subject={{ .Title }}&body={{ $.Site.Params.socialshare }}" + safeUrl;
+            $(this).attr('href', shareUrl);
+            $(this).addClass('fb-share');
+          });
+          //upvote count Mutation starts here
+          $(".upvote-ttl").on("click", function () {
+            if (personid != null) {
+            if ($(this).attr('disabled')) {
+              console.log('exists'); return false;
+            }
+            else {
+              $(this).attr("disabled", "disabled");
+              $(this).css('cursor', 'default');
+
+              var post_id = $(this).attr("data-app");
+              //var currentUpvote = $(this).find(".b").html();
+              var currentUpvote = $("#wishlist").html();
+              // var updatedCount = parseInt(currentUpvote[1]) + 1;
+              var this_var = $(this);
+
+
+              // $(".upvote-ttl").html('<i class="fa fa-arrow-up"></i> ' + updatedCount);
+
+              var serviceData = { "url": "{{ $.Site.Params.GraphQLUrl }}", "method": "POST", "query": "mutation{updatePromCount(type:\"upvote\",inputData:\"{\\\"source\\\": \\\"http://medigy.com\\\",\\\"identifier\\\": \\\"" + post_id + "\\\",\\\"type\\\":\\\"upvote\\\",\\\"upvoteCount\\\": \\\"1\\\",\\\"personId\\\": \\\"" + personid + "\\\"}\")}" };
+            ajaxPageServiceCall.serviceCall(serviceData).then(response => {
+              if (response.data.updatePromCount == "Successfully added prometheus data") {
+                  $("#wishlist").html(updatedCount)
+                }
+            })
+                .catch(error => {
+                    console.log(error);
+                });
+
+
+            }
+          }
+          else
+          {
+            $('#loginModalCenter').modal('toggle');
+          }
+          });
+          //upvote count Mutation starts here
+
+          //Watch count Mutation starts here
+
+          $(".watch-push").on("click", function () {
+            var post_id = $(this).attr("data-app");
+            var title = $(this).attr("data-name");
+            var this_var = $(this);
+            var personid = getCookie('personid');
+            var currentWatch = this_var.find("p").html();
+            var updatedWatch = parseInt(currentWatch) + 1;
+
+            var serviceData = { "url": "{{ $.Site.Params.GraphQLUrl }}", "method": "POST", "query": "mutation{\n  updatePromCount(type:\"watch\",inputData:\"{\\\"source\\\": \\\"http://medigy.com\\\",\\\"identifier\\\": \\\"" + post_id + "\\\",\\\"type\\\": \\\"Product\\\",\\\"personId\\\": \\\"" + personid + "\\\",\\\"name\\\": \\\"" + title + "\\\",\\\"status\\\": \\\"1\\\"}\")\n}" };
+            ajaxPageServiceCall.serviceCall(serviceData).then(response => {
+              this_var.find("p").html(updatedWatch);
+            })
+                .catch(error => {
+                    console.log(error);
+                });
+
+
+          });
+
+          //Watch count Mutation ends here
+
+          //email_count Mutation starts here
+          $(".email-share-push ").on("click", function () {
+            var post_id = $(this).attr("data-app");
+            var post_name = $(this).attr("data-name");
+            var this_var = $(this);
+            var personid = getCookie('personid');
+            var currentemailShare = this_var.find("p").html();
+            var updatedemailShare = parseInt(currentemailShare) + 1;
+
+            var serviceData = { "url": "{{ $.Site.Params.GraphQLUrl }}", "method": "POST", "query": "mutation{\n  updatePromCount(type:\"emailshare\",\n    inputData:\"{\\\"source\\\": \\\"http://medigy.com\\\",\\\"type\\\": \\\"Product\\\",\\\"identifier\\\": \\\"" + post_id + "\\\",\\\"emailShareCount\\\": \\\"1\\\",\\\"personId\\\": \\\"" + personid + "\\\",\\\"name\\\":\\\"" + post_name + "\\\",\\\"status\\\": \\\"1\\\"}\")\n}" };
+            ajaxPageServiceCall.serviceCall(serviceData).then(response => {
+              this_var.find("p").html(updatedemailShare);
+            })
+                .catch(error => {
+                    console.log(error);
+                });
+
+          });
+          //email_count Mutation ends here      
+
+          //Facebook share count Mutation ends here
+          $(".fb-share-push").on("click", function () {
+            var post_id = $(this).attr("data-app");
+            var post_name = $(this).attr("data-name");
+            var this_var = $(this);
+            var personid = getCookie('personid');
+            var currentfbShare = this_var.find("p").html();
+            var updatedfbShare = parseInt(currentfbShare) + 1;
+
+            var serviceData = { "url": "{{ $.Site.Params.GraphQLUrl }}", "method": "POST", "query": "mutation{\n  updatePromCount(type:\"fbshare\",\n    inputData:\"{\\\"source\\\": \\\"http://medigy.com\\\",\\\"type\\\": \\\"Product\\\",\\\"identifier\\\": \\\"" + post_id + "\\\",\\\"emailShareCount\\\": \\\"1\\\",\\\"personId\\\": \\\"" + personid + "\\\",\\\"name\\\":\\\"" + post_name + "\\\",\\\"status\\\": \\\"1\\\"}\")\n}" };
+            ajaxPageServiceCall.serviceCall(serviceData).then(response => {
+
+            })
+                .catch(error => {
+                    console.log(error);
+                });
+
+          });
+          //Facebook share count Mutation ends here 
+          //
+
+        }
+        else {
+          $(".fb-share-push").each(function () {
+            $(this).attr("data-toggle", 'modal');
+            $(this).attr("data-target", '#loginModalCenter');
+          });
+          $(".twitter-share-push").each(function () {
+            $(this).attr("data-toggle", 'modal');
+            $(this).attr("data-target", '#loginModalCenter');
+          });
+          $(".email-share-push").each(function () {
+            $(this).attr("data-toggle", 'modal');
+            $(this).attr("data-target", '#loginModalCenter');
+          });
+          $(".watch-push").each(function () {
+            $(this).attr("data-toggle", 'modal');
+            $(this).attr("data-target", '#loginModalCenter');
+          });
+          $("#Qualitytab1").attr("data-toggle", 'modal');
+          $("#Qualitytab1").attr("data-target", '#loginModalCenter');
+          $("#User-Experiencetab1").attr("data-toggle", 'modal');
+          $("#User-Experiencetab1").attr("data-target", '#loginModalCenter');
+          $("#Expectationstab1").attr("data-toggle", 'modal');
+          $("#Expectationstab1").attr("data-target", '#loginModalCenter');
+
+          $(".Interoperabilitytab").attr("data-toggle", 'modal');
+          $(".Interoperabilitytab").attr("data-target", '#loginModalCenter');
+
+          $(".Securitytab").attr("data-toggle", 'modal');
+          $(".Securitytab").attr("data-target", '#loginModalCenter');
+
+          $(".Information-Assurancetab").attr("data-toggle", 'modal');
+          $(".Information-Assurancetab").attr("data-target", '#loginModalCenter');
+
+          $("#Ethics-and-Compliancetab1").attr("data-toggle", 'modal');
+          $("#Ethics-and-Compliancetab1").attr("data-target", '#loginModalCenter');
+
+          $("#suggestionFacetTab").attr("data-toggle", 'modal');
+          $("#suggestionFacetTab").attr("data-target", '#loginModalCenter');
+
+          $(".inviteProcess").attr("data-toggle", 'modal');
+          $(".inviteProcess").attr("data-target", '#loginModalCenter');
+
+          $("#claimOffering").attr("data-toggle", 'modal');
+          $("#claimOffering").attr("data-target", '#loginModalCenter');
+
+
+          /*
+          $("#QualitytabforInvite").attr("data-toggle", 'modal');
+          $("#QualitytabforInvite").attr("data-target", '#loginModalCenter');
+          $("#QualitytabforInvite").attr("data-toggle", 'modal');
+          $("#QualitytabforInvite").attr("data-target", '#loginModalCenter');
+          $("#QualitytabforInvite").attr("data-toggle", 'modal');
+          $("#QualitytabforInvite").attr("data-target", '#loginModalCenter');
+          $("#QualitytabforInvite").attr("data-toggle", 'modal');
+          $("#QualitytabforInvite").attr("data-target", '#loginModalCenter');
+          */
+
+          $("#feedbackproduct").hide();
+        }
+
+
+
+
+        // $('.z-tab').on("click", function () {
+
+        //$(this).find(".b").html()
+        var facetName = $(this).find('a').html();
+        var categories = "{{.Params.categories}}";
+        categories = categories.split('[');
+        categories = categories[1].split(']');
+        //alert(categories[0]);
+        //console.log(facetName);
+        $('.startProcessBtn').on("click", function (e) { 
+           if (getCookie('personid') != null && getCookie('sessionId')!= null && getCookie('sessionId')!= '' ) {      
+
+          var url = "/evaluation-facets"+$(this).attr('data-link');
+          var container = $(this).attr('data-container');
+          evaluationFacetsLoader(url,container);
+           }
+           else {
+           if (getCookie('personid') == null)
+              $('#loginModalCenter').modal('toggle');
+            else
+             $('#reLoginModalCenter').modal('toggle');
+           }
+
+        });
+        //evaluationFacetsLoader();
+        //userExperienceFacets();
+
+
+
+
+
+
+
+
+
+
+        $("#feedbackproduct").on("submit", function (e) {
+
+          if (e.isDefaultPrevented()) {
+            alert('form is not valid');
+          } else {
+            // everything looks good!
+            e.preventDefault();
+            $('#productfeedbacksubmit').prop("disabled", true);
+
+            var sessionId = getCookie('sessionId');
+            var userName = getCookie('firstname');
+            var userEmail = getCookie('userEmail');
+            var subject = $('#feedbackproductsubject').val();
+            var description = $('#feedbackproductdesc').val();
+            if(recurringCharacterValidate(subject)==true || recurringCharacterValidate(description)==true)  {
+             alert("Please fill up the fields with proper inputs.");
+             $('#productfeedbacksubmit').prop("disabled", false);
+             return false;            
+            } 
+            description = description.replace(/%/g, "percentage");
+            description = base64EncodeUnicode(description); 
+
+            console.log("mutation{\n  submitFeedback(authorization:{\n    sessionID:\"" + sessionId + "\"\n  },feedback:{\n  feedbackSubject:\"" + subject + "\"\n    feedbackDescription:\"" + description + "\"\n     supportType:\"ProductSuggestions\"\n    feedbackUserName:\"" + userName+ "\"\n    feedbackUserEmail:\"" + userEmail+ "\"\n     offeringId:\"{{ .Params.id }}\"\n    offeringName:\"{{ .Params.title }}\"\n  }){\n    status\n    message\n  errorCode\n}");
+
+            var serviceData = { "url": "{{ $.Site.Params.GraphQLUrl }}", "method": "POST", "query": "mutation{\n  submitFeedback(authorization:{\n    sessionID:\"" + sessionId + "\"\n  },feedback:{\n  feedbackSubject:\"" + subject + "\"\n    feedbackDescription:\"" + description + "\"\n    supportType:\"ProductSuggestions\"\n     feedbackUserName:\"" + userName+ "\"\n    feedbackUserEmail:\"" + userEmail+ "\"\n     offeringId:\"{{ .Params.id }}\"\n    offeringName:\"{{ .Params.title }}\"\n  }){\n    status\n    message\n  errorCode\n}}" };
+            ajaxPageServiceCall.serviceCall(serviceData).then(response => {
+              $('#productfeedback-sucess').html('');
+              $("#productfeedback-sucess").addClass('alert alert-success');
+              $("#productfeedback-sucess").html("We greatly appreciate the time you've taken to share with us your suggestions for improving {{ .Title }}. We will go over this in detail and get back.</br> Thank you very much.");
+              $('#productfeedbacksubmit').prop("disabled", false);
+              $('#feedbackproduct')[0].reset();
+
+            })
+                .catch(error => {
+                    console.log(error);
+                });
+
+          }
+        });
+
+        $("#feedbackcancel").on("click", function (e) {
+
+          $('#feedbackproductsubject').val('');
+          $('#feedbackproductdesc').val('');
+        });
+
+      });
+
+function evaluationFacetsLoader(url,container){
+  var divIdentifier = '#formContainer-'+container;
+  var articleData = '#'+container+'-tab-text';
+  $(articleData).hide();
+  $(divIdentifier).show();
+  var serviceData = { "url": url, "method": "GET", "query": "" };
+            ajaxPageServiceCall.serviceCall(serviceData).then(response => {
+              var pagetemp = response;
+              var divIdentifier = '#formContainer-'+container;
+              $(divIdentifier).html("");
+              window.formDef = pagetemp;
+              var btnDiv = '#'+container+'-button-div';
+              var submitButton = '#'+container+'-submit';
+              var cancelButton = '#'+container+'-cancel';
+              $(btnDiv).show();
+              $(submitButton).show();
+              $(cancelButton).show();
+              container = 'formContainer-'+container;
+              LForms.Util.addFormToPage('formDef', container);
+            })
+                .catch(error => {
+                    console.log(error);
+                    $(articleData).show();
+                    $(divIdentifier).hide();
+
+                });
+}
+$('.viewProcessBtn').click(function(){
+  var sessionId = getCookie('sessionId');
+  if(sessionId != null){
+    $(this).prop("disabled", true);
+    var productId = $(this).attr('data-product-id'); //7628
+    var fileName = $(this).attr('data-link'); //"medigy_quality_evaluation_facet_lhc_form.json";
+    var sessionId = getCookie('sessionId');
+    var facetTabName = $(this).attr('data-facet-tab-name');
+    var query = `query{
+    getFileHistory(authorization:{
+      sessionID:"`+sessionId+`"
+    }
+      projectId:`+productId+`
+      filePath:"`+fileName+`"
+      branch:"master"
+    ){
+      createdDate
+      commitId
+      createdUserName
+      createdUserEmail
+      createdUserRole
+      userReviewNumber
+      committedDate
+    }
+  }`;
+  var target = '#evaluation-facets-user-'+$(this).attr('data-tabid');
+  var facetName = $(this).attr('data-tabid');
+  var loaderDiv = '#evaluationanswerDetailLoading-'+$(this).attr('data-tabid');
+  $(target).html('');
+  $(loaderDiv).show();
+  var serviceData = { "url": "{{ $.Site.Params.GraphQLUrl }}", "method": "POST", "query": query };
+              ajaxPageServiceCall.serviceCall(serviceData).then(response => {
+                $(this).prop("disabled", false);        
+                console.log(response.data.getFileHistory); 
+                
+                if(response.data.getFileHistory === undefined)
+                {
+                  var message = "<div class='alert alert-warning'>There is no answer details available of this evaluation facets.</div>";
+
+                }
+                else
+                {
+                  if(response.data.getFileHistory.length > 0){
+                    var message = `<div class="qua-section bord-top-1 mt-5 pt-2">
+                        <div class="qua-row-1 mb-0">
+                            <h3 class="mt-1 mb-2">Most Relevant Customer Evaluation</h3>
+                            <div class="qua-row-3 qua-row-4">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th scope="col"><span><i class="fas fa-user qua-ico-1"></i></span> Submitted by</th>
+                                                <th scope="col"><span><i class="far fa-calendar-alt qua-ico-1"></i></span> Most recent</th>
+                                                <th scope="col" class="text-center"><span><i class="fas fa-eye qua-ico-1"></i></span> View/Hide</th>
+                                              </tr>
+                                          </thead>
+                                          <tbody>`;
+                    for(i=0; i< response.data.getFileHistory.length; i++){
+                      var splittedDate = response.data.getFileHistory[i].committedDate.split('T');
+                      message +=
+                                              `<tr>
+                                                  <td>`+response.data.getFileHistory[i].createdUserName+`</td>
+                                                  <td>`+splittedDate[0]+`</td>
+                                                  <td class="text-center" ><button class="view-bt-1 viewEvaluationFacetsAnswer" data-facet-tab-name="`+facetTabName+`" data-view-user-count="`+i+`" data-facet-name="`+facetName+`" data-file-name="`+fileName+`" data-committed-date="`+response.data.getFileHistory[i].committedDate+`" data-commit-id="`+response.data.getFileHistory[i].commitId+`" data-view-status="close" data-user="`+response.data.getFileHistory[i].createdUserName+`" title="Click to View User Review Details"> <i class="fas fa-arrow-right"></i> </button></td>
+                                              </tr>`;
+                      message +=    `<tr><td colspan="3" id="evaluation-facets-answer-`+facetName+i+`" class="evaluation-facets-answer qua-view-display-td"> </td></tr>`;                    
+
+                    }
+                    message += `
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>`;
+                    console.log(target);
+                    $(loaderDiv).hide();
+                    $(target).html(message);
+                  }
+                  else{
+                    var message = "<div class='alert alert-warning'>There is no answer details available of this evaluation facets.</div>";
+                    $(loaderDiv).hide();                                        
+                    $(target).html(message);
+                  }
+                   
+                }
+              })
+                  .catch(error => {
+                      console.log(error);
+                      var message = "<div class='alert alert-warning'>There is no answer details available of this evaluation facets.</div>";
+                      $(loaderDiv).hide();                     
+                      $(target).html(message);
+                  });
+
+  }
+  else{
+    $('#loginModalCenter').modal('toggle');
+  }
+
+});
+
+$(document).on("click", ".viewEvaluationFacetsAnswer", function(e){
+  var sessionId = getCookie('sessionId');
+  var dataCommittedDate = $(this).attr('data-committed-date');
+  var dataUser = $(this).attr('data-user');
+  var dataCommitId = $(this).attr('data-commit-id');
+  var dataFileName = $(this).attr('data-file-name');
+  var dataFacetName = $(this).attr('data-facet-name');
+  var dataViewCount =  $(this).attr('data-view-user-count');
+  var answerTarget = '#evaluation-facets-answer-'+dataFacetName+dataViewCount;
+  var facetTabName = $(this).attr('data-facet-tab-name');
+  var offeringId =  {{ .Params.id }}; //7628;
+  var dataViewStatus = $(this).attr('data-view-status');
+  if(sessionId != null ){
+    if(dataViewStatus == 'close'){
+      $(this).attr('data-view-status', 'open');
+      var answerQuery  = `query{
+        getFileByCommitId(commitId:"`+dataCommitId+`",
+        projectId:`+offeringId+`,
+        filePath:"optionals/`+dataFileName+`",
+        authorization:{sessionID:"`+sessionId+`"}){
+        fileContent
+        }
+        }`;
+        var loaderDiv = '#evaluationanswerDetailLoading-'+dataFacetName;
+        var loader = $(loaderDiv).html(); 
+
+        $(answerTarget).html(''); 
+        
+        $(answerTarget).html(loader);
+        var serviceData = { "url": "{{ $.Site.Params.GraphQLUrl }}", "method": "POST", "query": answerQuery };
+                  ajaxPageServiceCall.serviceCall(serviceData).then(response => {
+    //console.log(response);
+    var answerData = response.data.getFileByCommitId.fileContent.replace('window.formDef =', '');
+
+    answerData = answerData.replace('}"', "}");
+    answerData = JSON.parse(answerData)
+    console.log(answerData.items);                  
+                        
+    answerMessage = `<div class="radius-box">
+      <div class="">
+
+    <div class="qua-row-3 mb-0 pb-0">
+        <div class="table-responsive">
+            <table class="table">
+              <tbody>`;
+
+    for(j=1; j<answerData.items.length; j++){
+      var answerValue = '';
+      if(answerData.items[j].value != undefined ){
+        for(l=0;l<answerData.items[j].value.length;l++){
+        answerValue += answerData.items[j].value[l].text+', ';
+      }
+      }
+
+      answerMessage +=` <tr>
+                      <td class="qua-td-1">`+answerData.items[j].question+`</td>
+                      <td>`+answerValue+`</td>
+                    </tr>`;
+
+    }
+    answerMessage +=`</tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>`;
+        //$(loaderDiv).hide();       
+        $(answerTarget).html('');              
+        $(answerTarget).html(answerMessage);             
+
+                  })
+                      .catch(error => {
+                          console.log(error);
+                          var answerMessage = "<div class='alert alert-warning'>There is no answer details available of this evaluation facets.</div>";
+                          //$(loaderDiv).hide(); 
+                          $(answerTarget).html('');                    
+                          $(answerTarget).html(answerMessage);             
+                      });
+    }
+    else{
+      $(answerTarget).html('');
+      $(this).attr('data-view-status', 'close');
+    }
+
+  }
+  else{
+    $('#loginModalCenter').modal('toggle');
+  }
+
+});
+
+
+
+
+      //}
+
+
+
+  </script>
+
+
+
+  <script src="/js/lforms.min.js"></script>
+
+
+
+  <script>
+      function openEvaluationFacet(evt, facetName) {
+
+        //tabcontent Quantitative_Evaluation_Submit Quantitative_Evaluation_Cancel 
+
+        $(".tabcontent").hide();
+        $(".tablinks").removeClass("active");
+        var tabId = '#'+facetName+'Tab';
+        $(tabId).addClass("active");
+        $(".button-div").hide();    
+        $(".formContainer-lhc").hide();   
+        $('.facet-bt-wrapper').show();  
+        $('.return-success').hide();       
+        document.getElementById(facetName).style.display = "block";
+        // evt.currentTarget.className += " active";
+        setCookie('activeTab', facetName);
+        $(".evaluation-facets-answer").html('');
+        $(".evaluation-facets-user").html('');
+        
+        //$('#activeTab').val(facetName);
+      }
+
+
+      $('.Quantitative_Evaluation_Cancel').on("click", function () {
+        var container = $(this).attr('data-app');
+        var divIdentifier = '#formContainer-'+container;
+        var articleData = '#'+container+'-tab-text';
+        $(articleData).show();
+        $(divIdentifier).hide();
+        var btnDiv = '#'+container+'-button-div';
+        var submitButton = '#'+container+'-submit';
+        var cancelButton = '#'+container+'-cancel';
+        $(btnDiv).hide();
+        $(submitButton).hide();
+        $(cancelButton).hidehide();        
+      });
+
+      $(".inviteProcess").on("click", function () { 
+         var userEmail = getCookie('userEmail');
+         var product_Name = {{.Params.title}};
+         var tabid=$(this).data('tabid');
+         gtmAddproduct(product_Name,userEmail,tabid);     
+        if (getCookie('personid') != null) {
+          $('#inviteMessage').hide();
+          $('#inviteModalCenter').modal('toggle');          
+          $('#facetName').val($(this).attr('facet-name'));
+          $('#productName').val($(this).attr('product-name'));
+          $('#facetsSlug').val($(this).attr('data-app'));
+        }
+        else {
+          $('#loginModalCenter').modal('toggle');
+        }
+      });
+
+      $('#inviteform').on('submit', function (e) {
+
+        if (e.isDefaultPrevented()) {
+          alert('form is not valid');
+        }
+
+        else {
+          e.preventDefault();
+          $('#inviteButton').prop("disabled", true);
+          var inviteeEmail = $('#inviteEmail').val();
+          var fullUrl = window.location.href;
+          var splitedUrl = fullUrl.split('?');
+          if (typeof (splitedUrl) == 'undefined')
+            var url = window.location.href + '?invite=' + getCookie('activeTab') + '&facets=' + $('#facetsSlug').val();
+          else
+            var url = splitedUrl[0] + '?invite=' + getCookie('activeTab') + '&facets=' + $('#facetsSlug').val();
+          var fromName = getCookie('firstname');
+          var inviteeName = $('#inviteFirstName').val() + ' ' + $('#inviteLastName').val();
+          var facetName = $('#facetName').val();
+          var productName = $('#productName').val();
+          var serviceData = { "url": "{{ $.Site.Params.GraphQLUrl }}", "method": "POST", "query": 'mutation{\n  sendInviteEmail(email:["' + inviteeEmail + '"],\n  url:"' + url + '",fromName:"' + fromName + '",toName:"' + inviteeName + '",\n    facetName:"' + facetName + '",productName:"' + productName + '"){\n    status\n    message\n  }\n}' };
+            ajaxPageServiceCall.serviceCall(serviceData).then(response => {
+              $('#inviteButton').prop("disabled", false);
+            $('#inviteMessage').html("");
+            if (response.data.sendInviteEmail.status != "SUCCESS") {
+
+              $('#inviteMessage').html(response.data.sendInviteEmail.message);
+              $('#inviteMessage').addClass('alert-danger');
+              $('#inviteMessage').show();
+            }
+            else {
+
+              $('#inviteMessage').html(response.data.sendInviteEmail.message);
+              $('#inviteMessage').addClass('alert-success');
+              $('#inviteMessage').show();
+              $('#inviteform')[0].reset();
+            }
+            })
+                .catch(error => {
+                    console.log(error);
+                });
+
+        }
+
+
+      });
+      $(document).ready(function () {
+        $('#claimOffering').on("click", function () {
+          if (getCookie('personid') != null) {
+            $('#claimimgForm').show();
+            $('#claimingProductArea').hide();
+            $('#claimProductMessage').hide();              
+
+          }
+          var userEmail = getCookie('userEmail');  
+          var product_Name = $('.ofer-ttl-1 ').attr('data-name');  
+          gtmAddproduct(product_Name,userEmail);        
+        });
+      });
+      $('#claimOfferingCancel').on("click", function () {
+        $('#claimimgForm').hide();
+        $('#claimingProductArea').show();
+        $('#claimimgForm').hide();
+        $('#claimProductMessage').hide();
+      });
+      $('#claimOfferingButton').on("click", function (e) {
+        e.preventDefault();
+        var tenantId = $('#tenantIdForClaim').val();
+        var tenatName = $("#tenantIdForClaim option:selected").html();
+        var productName = $(this).attr('productName');
+        var r = confirm("Do you want to continue the claim process of the offering '" + productName + "' to the '" + tenatName + "' organization.");
+        if (r == true) {
+          if (getCookie('personid') != null && tenantId != null) {
+            $('#claimOfferingButton').prop("disabled", true);
+            var sessionId = getCookie('sessionId');
+            var email = getCookie('userEmail');
+            var productId = $(this).attr('productId');
+            var productName = $(this).attr('productname');
+            var ownerTenatName = '{{ .Params.tenantName }}';
+            var name = getCookie('firstname');
+            console.log("mutation{\n  claimOffering(authorization:{\n    sessionID:\"" + sessionId + "\"\n  },offering:{\n    offeringId:\"" + productId + "\",\n    offeringName:\"" + productName + "\",\n   tenantId:\"" + tenantId + "\",\n    tenantName:\"" + tenatName + "\",\n    offeringOwnerTenantName:\"" + ownerTenatName + "\",\n    claimType:\"offeringClaims\",\n    claimStatus:\"open\"\n  }){status\n    message\n    errorCode\n    \n  }\n}");
+            var serviceData = { "url": "{{ $.Site.Params.GraphQLUrl }}", "method": "POST", "query": "mutation{\n  claimOffering(authorization:{\n    sessionID:\"" + sessionId + "\"\n  },offering:{\n    offeringId:\"" + productId + "\",\n    offeringName:\"" + productName + "\",\n   tenantId:\"" + tenantId + "\",\n    tenantName:\"" + tenatName + "\",\n    offeringOwnerTenantName:\"" + ownerTenatName + "\",\n    claimType:\"offeringClaims\",\n    claimStatus:\"open\"\n  }){status\n    message\n    errorCode\n    \n  }\n}" };
+            ajaxPageServiceCall.serviceCall(serviceData).then(response => {
+              $('#claimProductMessage').html("");
+              if (response.data.claimOffering.status != "SUCCESS") {
+                $('#claimOfferingButton').prop("disabled", false);
+                $('#claimProductMessage').html(response.data.claimOffering.message);
+                $('#claimProductMessage').addClass('alert-danger');
+                $('#claimProductMessage').show();
+                $('#claimimgForm').hide();
+                $('#claimOffering').show();
+              }
+              else {
+                $('#claimOfferingButton').prop("disabled", true);
+                $('#claimProductMessage').html(response.data.claimOffering.message);
+                $('#claimProductMessage').addClass('alert-success');
+                $('#claimProductMessage').show();
+                $('#claimimgForm').hide();
+                $('#claimOffering').show();
+              }
+            })
+            .catch(error => {
+                console.log(error);
+            });
+          }
+        }
+        else {
+          //$('#loginModalCenter').modal('toggle'); 
+          $('#claimimgForm').hide();
+          $('#claimingProductArea').show();
+        }
+      })
+
+      $('#claimInfo').on("mouseenter touchstart", function () {
+        $('#claimInfoMessageBox').show();
+      });
+      $('#claimInfo').on("mouseleave touchend", function () {
+        $('#claimInfoMessageBox').hide();
+      });
+      var inviteQueryString = getUrlVars()["invite"];
+      //alert(inviteQueryString);
+      //console.log(typeof(getUrlVars()["invite"]));
+      if (typeof (getUrlVars()["invite"]) != 'undefined') {
+        setCookie('activeTab', inviteQueryString);
+      }
+      else {
+        setCookie('activeTab', getCookie('activeTab'));
+      }
+      var inviteFacets = getUrlVars()["facets"];
+      if (typeof (inviteFacets) != 'undefined') {
+        setCookie('activeFacets', inviteFacets);
+        if (getCookie('activeTab') == 'Information-Assurance') {
+          document.getElementById("informationAssuranceFacetTab").click();
+          $("#Information-Assurancetab1-text").hide();
+          $("#information-assurance-evaluation-facet").show();
+          $("#information-assurance-evaluation-facet-cancel").show();
+          $("#formContainer5").show();
+
+          $("#formContainer5").html('');
+          $("#formContainer5").html('<div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><br /> <br /> <br />Loading...  </div>');
+          informationAssuranceFacets();
+        }
+
+
+      }
+      else {
+        setCookie('activeFacets', '');   
+         
+        {{ $innovatorParsed := "netspective_communications" }}
+        {{ $url := print "/data/evaluation_facets/" $innovatorParsed "_institution_conf.json" }}
+        {{ $facets := getJSON $url }}
+        {{ range first 1 (where (sort $facets "order" "asc") "display" "=" "show")}}
+        {{ $typeData := lower (replace .type " " "-" ) }}
+       
+        openEvaluationFacet('event', '{{ $typeData }}');
+        $("#{{ $typeData }}Tab").addClass("active");
+        {{ end }}
+        
+      } 
+//start button datalayer variable
+ $(document).ready(function () { 
+       $(".startProcessBtn").on("click", function () { 
+         var userEmail = getCookie('userEmail');
+         var product_Name = {{.Params.title}};
+         var tabid=$(this).data('tabid');
+         gtmAddproduct(product_Name,userEmail,$(this).data('tabid'));   
+       
+      }); 
+
+
+ });
+
+
+   
+
+ 
+//data layer variable
+ function gtmAddproduct(product_Name,userEmail,tabid){
+    window.dataLayer = window.dataLayer || [];
+         window.dataLayer.push({
+       'gtmTitle':product_Name,
+       'gtmTab':tabid,
+       'gtmPersonid': userEmail       
+       
+      });
+ }
+
+
+  </script>
+
+  <script type="text/javascript" src="/js/bootstrap-slider.js"></script> 
+  {{ partial "footer.html" . }}
+  {{ $.Scratch.Set "uniqueCommentKey"  .Title }} 
+  {{ partial "isso.html" . }}
+
+
+
+
+  
+<link rel="stylesheet" href="/css/select2.min.css" />
+<script type="text/javascript" src="/js/select2.min.js"></script>
+
+
+</body>
+
+</html>
