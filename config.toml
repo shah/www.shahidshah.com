@@ -1,6 +1,6 @@
 languageCode = "en-us"
 defaultContentLanguage = "en"
-baseURL = "https://profiles.pages.gl.infra.medigy.com"
+baseURL = "https://shahidshah.netlify.com"
 title = "Shahid N. Shah"
 theme = "beautifulhugo"
 [params]
