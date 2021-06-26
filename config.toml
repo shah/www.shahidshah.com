@@ -1,8 +1,8 @@
 languageCode = "en-us"
 defaultContentLanguage = "en"
-baseURL = "https://shahidshah.netlify.com"
+# baseURL = "https://shahidshah.netlify.com"
 title = "Shahid N. Shah"
-theme = "beautifulhugo"
+# theme = "beautifulhugo"
 [params]
   brand = "Medigy"
   GraphQLUrl = "https://devl.dss.next.medigy.com/graphql"
@@ -16,6 +16,7 @@ theme = "beautifulhugo"
   raUrl = "https://devl.ra.admin.next.medigy.com/"
   gitlabUrl = "https://devl.gl.next.infra.medigy.com/api/v4"
   sitename = "Shahid Shah"
+  custom_css = ["css/style.css"]
 [outputs]
   home = ["HTML", "RSS", "JSON"]
   page = ["HTML","Calendar", "JSON"]

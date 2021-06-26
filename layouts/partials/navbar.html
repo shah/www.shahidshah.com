@@ -1,0 +1,35 @@
+<!-- menu items starts -->
+<div class="slds-context-bar">	
+	<nav class="slds-context-bar__secondary" role="navigation">	 
+		<ul class="slds-grid">
+			<li  class="slds-context-bar__item">
+			<a  class="slds-context-bar__label-action"  title="{{ .Name }}" href="{{  print ($.Scratch.Get "innerBasePath") "" }}">				
+				<svg class="slds-icon slds-input__icon  slds-icon-text-default slds-icon_x-small" aria-hidden="true">
+					<use xlink:href="{{ .Site.BaseURL }}/icons/utility-sprite/svg/symbols.svg#home"></use>
+				</svg> 			
+			</a>
+		</li>
+		<li  class="slds-context-bar__item">
+			<a  class="slds-context-bar__label-action" href="{{  print ($.Scratch.Get "innerBasePath") "speaking-schedule" }}">Speaking Schedule </a>
+		</li>
+		<li  class="slds-context-bar__item">
+			<a  class="slds-context-bar__label-action" href="{{  print ($.Scratch.Get "innerBasePath") "intellectual-property" }}">IP</a>
+		</li>
+		<li class="slds-context-bar__item">
+			<a  class="slds-context-bar__label-action" href="{{  print ($.Scratch.Get "innerBasePath") "blog/architecture-engineering/" }}">Blog</a>
+		</li>
+		<li  class="slds-context-bar__item">
+			<a  class="slds-context-bar__label-action" href="{{  print ($.Scratch.Get "innerBasePath") "media-coverage" }}">Media Coverage</a>
+		</li>
+		<li  class="slds-context-bar__item">
+			<a  class="slds-context-bar__label-action" href="{{  print ($.Scratch.Get "innerBasePath") "speechabstracts" }}">Speech Abstracts</a>
+		</li>
+			<li  class="slds-context-bar__item">
+			<a  class="slds-context-bar__label-action" href="{{  print ($.Scratch.Get "innerBasePath") "gallery/shahidshah/" }}">Gallery</a>
+		</li>
+		<li  class="slds-context-bar__item">
+			<a  class="slds-context-bar__label-action" href="{{  print ($.Scratch.Get "innerBasePath") "bios" }}">Bios </a>
+		</li>   
+		</ul>  
+	</nav>
+</div>

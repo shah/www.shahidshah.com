@@ -1,0 +1,77 @@
+{{- $src := .Get "src" -}}
+{{- $heading := .Get "heading" -}}
+
+<article class="slds-card slds-m-top_xx-large">
+    {{if $heading}}
+        <div class="slds-grid slds-wrap slds-gutters ">
+            <div class="slds-col slds-size_12-of-12 ">
+            <div class="slds-page-header__name slds-border_bottom w-100">
+                <div class="slds-page-header__name-title slds-p-around_x-small">
+                    <h2>
+                    <span class="slds-page-header__title slds-truncate" title="Rohde Corp - 80,000 Widgets">{{$heading}}</span>
+                    </h2>
+                </div>
+                </div>
+            </div>
+        </div>
+    {{end}}
+
+<div class="slds-grid slds-wrap slds-gutters ">
+    {{ range (where .Site.RegularPages.ByTitle "Section" $src ) }}
+        <div class="slds-col slds-size_6-of-12 slds-m-top_large">           
+                <div class="slds-card__header slds-grid">
+                <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                    <div class="slds-media__figure">
+                        <div class="slds-media slds-media_responsive">
+                            <div class="slds-media__figure">
+                              <span class="slds-avatar slds-avatar_large">
+                                  {{if .Params.school_logo }}
+                                    <img src=" {{ .Params.school_logo }} " alt="{{ .Params.name | humanize  }}">
+                                  {{else}}
+
+                                    <img src=" {{ "/shahidshah/img/icon-192.png" | absURL }} " alt="{{ .Params.name | humanize  }}">
+                                {{end}}
+
+                              </span>
+                            </div>
+                          </div>
+
+                    </div>
+                    <div class="slds-media__body">
+                        <h2 class="slds-card__header-title">                        
+                            <span>{{ .Params.school_name | humanize  }}</span>
+                        </h2>
+                        <div class="slds-text-color_weak slds-m-top_medium slds-m-bottom_medium">{{ .Params.degree_name | humanize  }}</div>
+
+                        <span class="slds-badge">Start Date:
+                            <em>{{ .Params.start_date  }}</em>
+                          </span>
+
+                          <span class="slds-badge">End Date:
+                            <em>{{ .Params.end_date  }}</em>
+                          </span>
+
+                    </div>
+
+                </header>
+                </div>
+                <div class="slds-card__body slds-card__body_inner">{{.Content}}</div>
+               
+            
+        </div>
+
+         
+
+<!-- <li><a href="{{ .Permalink }}">{{ .Params.title | humanize | title }} {{ .Params.masthead | humanize | title }}  </a> {{.Content}}</li> -->
+{{ end }}
+
+
+</div>
+
+
+</article>
+
+
+
+
+{{.Inner}}

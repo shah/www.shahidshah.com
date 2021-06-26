@@ -1,6 +1,8 @@
 ---
 # Display name
-name: Shahid N. Shah
+name: Shahid N. Shah  
+avatar: "/shahidshah/img/admin/avatar_hud083ec1a2ddc9b61731b5f8f94f966fa_62795_250x250_fill_q90_lanczos_center.jpg"
+oneliner: "Gov 2.0, Health IT, Bio IT & digital Med Device Inventor, CTO, Speaker, Entrepreneur"
 
 # Username (this should match the folder name)
 authors:
@@ -49,11 +51,14 @@ education:
 social:
 - icon: envelope
   icon_pack: fas
+  type: mail
   link: 'mailto:contact+www@shahidshah.com'  # For a direct email link, use "mailto:test@example.org".
 - icon: twitter
   icon_pack: fab
+  type: twitter
   link: https://twitter.com/ShahidNShah
 - icon: github
+  type: github
   icon_pack: fab
   link: https://github.com/shah
 # Link to a PDF of your resume/CV from the About widget.

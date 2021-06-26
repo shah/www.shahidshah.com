@@ -1,0 +1,21 @@
+{{- $src := .Get "src" -}}
+<article class="slds-card slds-m-top_x-large ">
+    <div class="slds-grid slds-wrap slds-gutters ">
+        {{ range (where .Site.RegularPages.ByTitle "Section" $src ) }}
+            <div class="slds-col slds-size_6-of-12 slds-x-top_large">           
+                <div class="slds-card__header slds-grid">
+                    <header class="slds-media slds-media_center slds-has-flexi-truncate">                       
+                        <div class="slds-media__body">
+                            <h2 class="slds-card__header-title">                            
+                                <span>{{ .Params.masthead | humanize  }}</span>                            
+                            </h2>
+                        </div>
+                    </header>
+                </div>
+                <div class="slds-card__body slds-card__body_inner">{{.Content}}</div>                
+            </div>
+        <!-- <li><a href="{{ .Permalink }}">{{ .Params.title | humanize | title }} {{ .Params.masthead | humanize | title }}  </a> {{.Content}}</li> -->
+        {{ end }}
+    </div>
+</article>
+{{.Inner}}

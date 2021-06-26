@@ -1,0 +1,20 @@
+
+{{ with .Params.tags}}
+<div class="slds-text-align_right">
+  <ul class="slds-list_horizontal slds-has-dividers_right slds-has-block-links slds-text-align_right taglist">
+    {{ range . }}
+    {{ $tagName := . }}
+    {{ with $.Site.GetPage (printf "/%s/%s" "tags" ($tagName | urlize)) }}
+      <li class="slds-m-left_x-small">      
+        <span class="slds-badge">
+          <a href="{{ .Permalink }}">{{ $tagName }}</a> 
+        </span>
+      </li>
+    {{ end }}
+    {{ end }}
+  </coral-taglist>
+</ul>
+</div>
+{{ end }}
+
+

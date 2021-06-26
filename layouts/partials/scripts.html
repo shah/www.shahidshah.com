@@ -1,8 +1,59 @@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/contrib/auto-render.min.js" integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous"
-    onload="renderMathInElement(document.body);"></script>
-<script type="text/javascript" src="/js/core.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<link rel="dns-prefetch preconnect" href="https://cdnjs.cloudflare.com/">
+<!-- <script src="{{ .Site.BaseURL }}js/tree.js"></script> -->
+<!-- <script src="{{ .Site.BaseURL }}js/treeitemLinks.js"></script> -->
 <script>
-  hljs.initHighlightingOnLoad();
+  /*SLDS Tabs JS*/
+$('.slds-tabs--default__link,.slds-tabs--scoped__link').click(function(){
+  $(this).parent().parent().find('.slds-tabs--default__link,.slds-tabs--scoped__link').attr('aria-selected','false');
+  $(this).attr('aria-selected','true');
+  $(this).parent().parent().find('.slds-tabs--default__link,.slds-tabs--scoped__link').attr('tabindex','-1');
+  $(this).attr('tabindex','0');
+  $(this).parent().addClass('slds-active').siblings().removeClass('slds-active');
+  $(this).parent().parent().parent().find('.'+$(this).parent().parent().parent().find('.slds-tabs--default__content,.slds-tabs--scoped__content')[0].classList[0]).removeClass('slds-show').addClass('slds-hide');
+  $(this).parent().parent().parent().find('#'+$(this).attr('aria-controls')).removeClass('slds-hide').addClass('slds-show');
+}); 
+/*SLDS Tabs JS*/
+
+
+  /*SLDS Tabs JS*/
+  $('.slds-tree .slds-button.slds-button_icon').click(function(){
+    $(this).parent().parent().parent().find('.slds-tree__branch').attr('aria-expanded','false');
+    $(this).parent().parent('.slds-tree__branch').attr('aria-expanded','true');
+    $(this).attr('aria-expanded','true');
+  }); 
+
+  $(document).ready(function () {
+
+     yourFunction();    
+    
+    function yourFunction(){
+
+      console.log("inside form");
+
+      
+      $(".mainList").parent().parent().attr('aria-expanded','true');
+
+
+      $(".slds-tree li").find("[aria-selected=true]").parent().addClass("currentUl");
+      //$(".slds-tree li").find("[aria-selected=true]").parent(".slds-tree__branch").addClass("liActive"));
+      $(".currentUl").parent(".slds-tree__branch").addClass("currentLlww");
+      $(".currentUl").parent(".slds-tree__branch").attr('aria-expanded','true');
+      $(".currentLlww").parent("ul").parent(".slds-tree__branch").attr('aria-expanded','true');
+    }
+
+});
+
 </script>
+
+
+{{ $jsBase := resources.Get "js/base.js" }}
+{{ $js := (slice $jsBase ) | resources.Concat "js/main.js" }}
+{{ if .Site.IsServer }}
+<script src="{{ $js.RelPermalink }}"></script>
+{{ else }}
+{{ $js := $js | minify | fingerprint }}
+<script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" crossorigin="anonymous"></script>
+{{ end }}
+

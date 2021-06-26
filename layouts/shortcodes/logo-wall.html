@@ -1,0 +1,68 @@
+{{- $src := .Get "src" -}}
+{{- $heading := .Get "heading" -}}
+
+<article class="slds-card slds-m-top_x-large ">
+    <div class="slds-grid slds-wrap slds-gutters ">
+        <div class="slds-col slds-size_12-of-12 ">
+            <div class="slds-page-header__name slds-border_bottom w-100">
+                <div class="slds-page-header__name-title slds-p-around_x-small">
+                  <h2>
+                    <span class="slds-page-header__title slds-truncate" title="Rohde Corp - 80,000 Widgets">{{$heading}}</span>
+                  </h2>
+                </div>
+              </div>
+        </div>
+        {{ range (where .Site.RegularPages.ByTitle "Section" $src ) }}
+            <div class="slds-col slds-size_4-of-12 slds-x-top_large">           
+                <div class="slds-card__header slds-grid">
+                    <header class="slds-media slds-media_center">                       
+                        <div class="slds-media__body">
+                            <h2 class="slds-card__header-title"> 
+                                {{if .Params.image }}                           
+                                <span class="slds-icon_container slds-icon-utility-announcement slds-m-right_small" title="Description of icon when needed">
+                                    <img src="{{ .Params.image | absURL  }}" alt="Description of the image" />
+                                  </span>  
+                                {{end}}  
+                                  <span>{{ .Params.title | humanize  }}</span>                            
+                            </h2>
+                        </div>
+                    </header>
+                </div>
+                <div class="slds-card__body slds-card__body_inner">
+
+                    <div class="slds-p-horizontal_xx-small ">
+                        <div class="slds-file slds-file_card slds-has-title">
+                          <figure>
+                            <a href="{{ .Params.link | absURL  }}" class="slds-file__crop slds-file__crop_16-by-9">
+                              <span class="slds-assistive-text">Preview:</span>
+                              <img src="{{ .Params.logo | absURL  }}" alt="Description of the image" />
+                            </a>
+                            <figcaption class="slds-file__title slds-file__title_card">
+                              <div class="slds-media slds-media_small slds-media_center">
+                                <div class="slds-media__figure slds-line-height_reset">
+                                  <span class="slds-icon_container" title="image">
+                                    <svg class="slds-icon slds-icon_x-small" aria-hidden="true">
+                                      <use xlink:href="/assets/icons/doctype-sprite/svg/symbols.svg#image"></use>
+                                    </svg>
+                                    <span class="slds-assistive-text">image</span>
+                                  </span>
+                                </div>
+                                <div class="slds-media__body">
+                                  <span class="slds-file__text " title="Image Title">{{ .Params.info  }}</span>
+                                </div>
+                              </div>
+                            </figcaption>
+                          </figure>
+                        </div>
+                    </div>
+                    
+                    {{.Content}}
+                
+                
+                </div>                
+            </div>
+        <!-- <li><a href="{{ .Permalink }}">{{ .Params.title | humanize | title }} {{ .Params.masthead | humanize | title }}  </a> {{.Content}}</li> -->
+        {{ end }}
+    </div>
+</article>
+{{.Inner}}

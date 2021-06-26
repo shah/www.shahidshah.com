@@ -1,0 +1,53 @@
+{{- $src := .Get "src" -}}
+{{- $heading := .Get "heading" -}}
+
+<article class="slds-card slds-m-top_large ">
+  <div class="slds-grid slds-wrap slds-gutters ">
+    <div class="slds-col slds-size_12-of-12 ">
+      <div class="slds-page-header__name slds-border_bottom w-100">
+          <div class="slds-page-header__name-title slds-p-around_x-small">
+            <h2>
+              <span class="slds-page-header__title slds-truncate" title="Rohde Corp - 80,000 Widgets">{{$heading}}</span>
+            </h2>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="slds-grid slds-wrap slds-gutters " style="height: 100%;">
+      {{ range (where .Site.RegularPages.ByTitle "Section" $src ) }}
+        <div class="slds-col slds-size_6-of-12" style="height: 100%;">
+          <div class="slds-has-dividers_around-space slds-card__body slds-card__body_inner" >          
+            <div class="slds-item ">          
+              <article class="slds-tile slds-tile_board">
+                <h3 class="slds-tile__title slds-text-heading_medium slds-truncate slds-m-bottom_medium" title="{{.Title}}">
+                  <a href="{{.Params.patent_url}}">{{.Title}}</a>
+                </h3>
+                <div class="slds-tile__detail">
+                  {{with .Params.patent_number }} <p class="slds-text-heading_small">Patent Number {{.}}</p> {{end}}
+                  {{with .Params.application_number }} <p class=""><strong>Application Number:</strong>  {{.}}</p> {{end}}
+                  {{with .Params.filed_on }}<p class=""><strong>Filed On:</strong>  {{.}}</p>{{end}}
+                  {{with .Params.issued_on }} <p class="slds-truncate"><strong>Issued On:</strong>  {{.}} </p>{{end}}
+                  {{with .Params.issuer }}<p class="slds-truncate"><strong>Issue By:</strong> {{.}}</p>{{end}}
+
+                  <p>{{.Params.description}}</p>
+                </div>
+              </article>
+
+            </div>
+
+          </div>
+        </div>
+      {{end}}
+   
+
+    </div>
+
+</article> 
+
+
+
+
+{{.Inner}}
+
+

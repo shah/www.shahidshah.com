@@ -1,0 +1,32 @@
+
+<!doctype html>
+<html lang="{{ .Site.Language.Lang }}" class="no-js">
+  <head>
+    {{ partial "head.html" . }}
+    <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ with .Title }}{{ . }} | {{ end }}{{ .Site.Title }}{{ end }}</title>
+  </head>
+<body class="">    
+  <header>  
+    {{ partial "header.html" . }}
+  </header>
+<main class="container flex slds-m-vertical_small slds-container_x-large"> 
+  <div class="slds-grid slds-wrap">
+     <!-- Page Content -->
+     <div class="slds-size_12-of-12">
+      <div class="slds-box_x-small  slds-m-around_x-small">
+        <div class="page-content">   
+          <article>
+            {{ template "main" . }}
+          </article>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+{{ partialCached "scripts.html" . }}
+
+</body>
+</html>
+

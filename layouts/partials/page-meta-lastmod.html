@@ -1,0 +1,8 @@
+
+<hr>
+<div class="slds-text-align_right">
+  {{ T "post_last_mod"}} 
+    {{ .Lastmod.Format .Site.Params.time_format_default }}
+    {{ with .GitInfo }}: <a class="sdls-Link" href="{{ $.Site.Params.github_repo }}/commit/{{ .Hash }}">{{ .Subject }} ({{ .AbbreviatedHash }})</a>{{end }}
+</div>
+

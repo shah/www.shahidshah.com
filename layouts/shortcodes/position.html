@@ -1,0 +1,73 @@
+{{- $src := .Get "src" -}}
+{{- $heading := .Get "heading" -}}
+
+
+<article class="slds-card slds-m-top_large ">
+  <div class="slds-grid slds-wrap slds-gutters ">
+    <div class="slds-col slds-size_12-of-12 ">
+      <div class="slds-page-header__name slds-border_bottom w-100">
+          <div class="slds-page-header__name-title slds-p-around_x-small">
+            <h2>
+              <span class="slds-page-header__title slds-truncate" title="Rohde Corp - 80,000 Widgets">{{$heading}}</span>
+            </h2>
+          </div>
+        </div>
+      </div>
+    </div>
+<ol class="slds-setup-assistant">
+  {{ range (where .Site.RegularPages.ByTitle "Section" $src ) }}
+  <li class="slds-setup-assistant__item">
+    <article class="slds-setup-assistant__step">
+      <div class="slds-setup-assistant__step-summary">
+        <div class="slds-media">
+          <div class="slds-col slds-size_1-of-12 ">
+            <div class="slds-media__figure">
+              <div class="slds-progress-ring  slds-progress-ring_large logo-80">                
+                <div class="slds-progress-ring__content">
+                  <span class="slds-icon_container slds-icon-utility-check" title="Complete">
+                    {{if .Params.company_logo }}
+                      <img src="{{ .Params.company_logo }} " alt="{{.Params.company_name}}">
+                    {{else }}
+                    <img src="{{ "/shahidshah/img/download.png"  | absURL }}" alt="{{.Params.company_name}}">
+                    {{end}}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="slds-col slds-size_4-of-12 "> 
+            <div class="slds-media__body slds-m-top_x-small">
+              <div class="slds-media">
+                <div class="slds-setup-assistant__step-summary-content slds-media__body">
+                  <h3 class="slds-setup-assistant__step-summary-title slds-text-heading_small">{{.Params.title}}</h3>
+                  <p><strong>{{.Params.company_name}}</strong> </p>
+                  <p>{{.Params.location}}</p>
+                  <small><strong>Started: </strong> {{.Params.started_on}}</small> - <small><strong>Ended: </strong> {{.Params.finished_on}}</small>
+                </div>
+              </div>
+            </div>
+        </div>
+        <div class="slds-col slds-size_7-of-12 ">
+          <div class="slds-setup-assistant__step-summary-content slds-media__body">
+            {{.Params.description}}
+          </div>
+         
+          
+        </div>
+
+
+
+        </div>
+      </div>
+    </article>
+  </li>
+  {{ end }}
+</ol>
+</article>
+
+
+
+{{.Inner}}
+
+
