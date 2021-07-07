@@ -21,11 +21,6 @@ summary: >-
 ---
 
 
-
-  
-
-
-
 {{<highlights src="highlights"/>}}
 
 {{<recommendations src="recommendations"  heading="Recommendations"/>}}
@@ -41,6 +36,14 @@ summary: >-
 {{<education src="education" heading="Education" />}}
 
 {{<projects src="projects" heading="Projects" />}}
+
+
+{{<learning src="learning" heading="learning" />}}
+
+
+
+{{<publication src="publications" heading="Publication" />}}
+
 
 
 

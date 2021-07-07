@@ -1,0 +1,96 @@
+{{- $src := .Get "src" -}}
+{{- $heading := .Get "heading" -}}
+
+<article class="slds-card slds-m-top_xx-large">
+    {{if $heading}}
+        <div class="slds-grid slds-wrap slds-gutters ">
+            <div class="slds-col slds-size_12-of-12 ">
+            <div class="slds-page-header__name slds-border_bottom w-100">
+                <div class="slds-page-header__name-title slds-p-around_x-small">
+                    <h2>
+                      <span class="slds-page-header__title slds-truncate" title="Rohde Corp - 80,000 Widgets">{{$heading}}</span>
+                    </h2>
+                </div>
+                </div>
+            </div>
+        </div>
+    {{end}}
+
+<div class="slds-grid slds-wrap slds-gutters ">
+
+    <ul class="slds-timeline slds-m-top_x-large" style="width: 97%;">
+      {{ range (where .Site.RegularPages.ByTitle "Section" $src ) }}
+
+        <li>
+          <div class="slds-timeline__item_expandable slds-timeline__item_task slds-is-open">
+            <span class="slds-assistive-text">task</span>
+            <div class="slds-media">
+              <div class="slds-media__figure">
+                <button class="slds-button slds-button_icon" title="Toggle details for Review proposals for EBC deck with larger team and have marketing review this" aria-controls="task-item-expanded" aria-expanded="true">
+                  <svg class="slds-button__icon slds-timeline__details-action-icon" aria-hidden="true">
+                    <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#switch"></use>
+                  </svg>
+                  <span class="slds-assistive-text"></span>
+                </button>
+                <div class="slds-icon_container slds-icon-standard-task slds-timeline__icon" title="task">
+                  <svg class="slds-icon slds-icon_small" aria-hidden="true">
+                    <use xlink:href="/assets/icons/standard-sprite/svg/symbols.svg#task"></use>
+                  </svg>
+                </div>
+              </div>
+              <div class="slds-media__body">
+                <div class="slds-grid slds-grid_align-spread slds-timeline__trigger">
+                  <div class="slds-grid slds-grid_vertical-align-center slds-truncate_container_75 slds-no-space">                    
+                    <h3 class="slds-truncate" title="{{.Params.content_title}}">                     
+                        <strong>  {{.Params.content_title}}</strong>                      
+                    </h3>
+                    
+                  </div>
+                  <div class="slds-timeline__actions slds-timeline__actions_inline">
+                    <p class="slds-timeline__date">{{.Params.conten_type}}</p>
+                  </div>
+                </div>
+                <article class="slds-box slds-timeline__item_details slds-theme_shade slds-m-top_x-small slds-m-horizontal_xx-small slds-p-around_medium" id="task-item-expanded" aria-hidden="false">
+                  <ul class="slds-list_horizontal slds-wrap">
+                    <!-- <li class="slds-grid slds-grid_vertical slds-size_1-of-2 slds-p-bottom_small">
+                      <span class="slds-text-title slds-p-bottom_x-small">Name</span>
+                      <span class="slds-text-body_medium slds-truncate" title="Charlie Gomez">
+                        <a href="#">Charlie Gomez</a>
+                      </span>
+                    </li>
+                    <li class="slds-grid slds-grid_vertical slds-size_1-of-2 slds-p-bottom_small">
+                      <span class="slds-text-title slds-p-bottom_x-small">Related To</span>
+                      <span class="slds-text-body_medium slds-truncate" title="Tesla Cloudhub + Anypoint Connectors">
+                        <a href="#">Tesla Cloudhub + Anypoint Connectors</a>
+                      </span>
+                    </li> -->
+                  </ul>
+                  <div>
+                    <span class="slds-text-title">Description</span>
+                    <p class="slds-p-top_x-small">{{.Params.content_description | safeHTML }}</p>
+                  </div>
+                </article>
+              </div>
+            </div>
+          </div>
+        </li>
+        
+      {{end}}
+
+
+
+      </ul>
+
+
+
+
+
+</div>
+
+
+</article>
+
+
+
+
+{{.Inner}}

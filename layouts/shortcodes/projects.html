@@ -1,7 +1,7 @@
 {{- $src := .Get "src" -}}
 {{- $heading := .Get "heading" -}}
 
-<article class="slds-card slds-m-top_x-large slds-gutters">
+<article class="slds-card slds-m-top_x-large ">
     {{if $heading}}
         <div class="slds-grid slds-wrap ">
             <div class="slds-col slds-size_12-of-12 ">
@@ -16,29 +16,13 @@
         </div>
     {{end}}
 
-<ul class="slds-welcome-mat__tiles slds-grid slds-wrap">
+<ul class="slds-welcome-mat__tiles slds-grid slds-wrap slds-m-bottom_medium slds-gutters slds-m-left_none slds-m-right_none">
   {{ range (where .Site.RegularPages.ByTitle "Section" $src ) }}
 
   <li class=" slds-col slds-size_6-of-12 slds-m-bottom_medium">
     <div class="slds-welcome-mat__tile">    
     <a href="{{.Params.link}}" class="slds-box slds-box_link slds-media">
-      <!-- <div class="slds-media__figure slds-media__figure_fixed-width slds-align_absolute-center">
-        <div class="slds-welcome-mat__tile-figure">
-          <div class="slds-welcome-mat__tile-icon-container">
-            <span class="slds-icon_container slds-icon-utility-animal_and_nature">
-              <svg class="slds-icon slds-icon-text-default" aria-hidden="true">
-                <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#animal_and_nature"></use>
-              </svg>
-            </span>
-            <span class="slds-icon_container slds-icon_container_circle slds-icon-action-check" title="Completed">
-              <svg class="slds-icon slds-welcome-mat__icon-check" aria-hidden="true">
-                <use xlink:href="/assets/icons/action-sprite/svg/symbols.svg#check"></use>
-              </svg>
-              <span class="slds-assistive-text">Completed</span>
-            </span>
-          </div>
-        </div>
-      </div> -->
+      
       <div class="slds-media__body">
         <div class="slds-welcome-mat__tile-body">
           <h3 class="slds-welcome-mat__tile-title">{{.Title}}</h3>

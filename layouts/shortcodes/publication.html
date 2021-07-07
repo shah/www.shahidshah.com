@@ -1,0 +1,64 @@
+{{- $src := .Get "src" -}}
+{{- $heading := .Get "heading" -}}
+
+<article class="slds-card slds-m-top_xx-large">
+    {{if $heading}}
+        <div class="slds-grid slds-wrap slds-gutters ">
+            <div class="slds-col slds-size_12-of-12 ">
+            <div class="slds-page-header__name slds-border_bottom w-100">
+                <div class="slds-page-header__name-title slds-p-around_x-small">
+                    <h2>
+                      <span class="slds-page-header__title slds-truncate" title="{{$heading}}">{{$heading}}</span>
+                    </h2>
+                </div>
+                </div>
+            </div>
+        </div>
+    {{end}}
+
+    <div class="slds-grid slds-wrap  slds-p-around_x-small">
+
+      {{ range (where .Site.RegularPages.ByTitle "Section" $src ) }}
+      
+        <div class="demo-only demo-only_viewport slds-m-top_small" style="width: 100%;">
+          <div class="slds-notification-container1" >
+            <div aria-live="assertive" aria-atomic="" class="slds-assistive-text">event notification: Tesla - Renewal meeting</div>
+            <section class="slds-notification" role="" style="width: 100%;">
+              <div class="slds-notification__body" id="dialog-body-id-43">
+                <a class="slds-notification__target slds-media" href="{{.Params.link}}">
+                  
+                  <div class="slds-media__body">
+                    <h2 class="slds-text-heading_small slds-m-bottom_xx-small" id="noti52">
+                      <span class="slds-assistive-text">event notification:</span>  {{.Params.name}}</h2>
+                      <p><small>Published On {{.Params.published_on}} By: {{.Params.publisher}}</small>  </p>
+                      <p class="slds-m-top_x-small">{{.Params.description}} </p>
+                  </div>
+                </a>
+
+                
+             
+              </div>
+
+                
+
+               
+
+            </section>
+          </div>
+        </div>
+
+        {{end}}
+
+
+
+
+
+    </div>
+
+
+</article>
+
+
+
+
+{{.Inner}}
